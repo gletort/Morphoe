@@ -1,5 +1,5 @@
 # Morphoe
-[![License BSD-3](https://img.shields.io/pypi/l/morphoe.svg?color=green)](https://github.com/gletort/Morphoe/blob/main/LICENSE)
+[![License GPL-3](https://img.shields.io/pypi/l/morphoe.svg?color=green)](https://github.com/gletort/Morphoe/blob/main/LICENSE)
 
 Morphogenesis of olfactory epithelium.
 
@@ -26,4 +26,4 @@ Refer to our publication Zilliox, Letort et al. for more details about the model
 If you use this code or part of this code, please cite our publication or/and this repository.
 
 ## License
-Distributed under the terms of the [BSD-3] license, "Morphoe" is free and open source software
+Distributed under the terms of the GPL-3 license, "Morphoe" is free and open source software
