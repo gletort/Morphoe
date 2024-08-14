@@ -1,5 +1,4 @@
 # Morphoe
-[![License GPL-3](https://img.shields.io/pypi/l/morphoe.svg?color=green)](https://github.com/gletort/Morphoe/blob/main/LICENSE)
 
 Morphogenesis of olfactory epithelium.
 
