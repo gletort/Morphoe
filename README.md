@@ -12,7 +12,7 @@ Cells are distributed along the telencephalon and follow a chemotaxis gradient (
 
 There is no dependencies to install, you can use it directly on python (tested on python 3.8).
 
-To use it, call the `eon.py` main file in the simulation directory containing your parameter file `params.py`. Templates of parameter files are given in the folder [`simulation_template`](https://github.com/gletort/Morphoe/simulation_template) and in [our github repository associated to our publication](https://github.com/JulieBatut/Zilliox-Letort_2024/tree/main).
+To use it, call the `eon.py` main file in the simulation directory containing your parameter file `params.py`. Templates of parameter files are given in the folder [`simulation_template`](https://github.com/gletort/Morphoe/tree/main/simulation_template) and in [our github repository associated to our publication](https://github.com/JulieBatut/Zilliox-Letort_2024/tree/main).
 
 To run it, you can go inside the simulation directory and type in a Terminal:
 ```
