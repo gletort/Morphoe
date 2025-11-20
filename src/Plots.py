@@ -222,7 +222,7 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
     bfig()
     plt.subplot(splot)
     mywidth = npy.repeat( 0.75, nc )
-    bp = plt.boxplot(ys, whis='range', widths=mywidth)
+    bp = plt.boxplot(ys, widths=mywidth)
     plt.ylim(0,yl)
     for element in bp['medians']:
 	    element.set_color('grey')
