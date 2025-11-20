@@ -1,6 +1,6 @@
 import sys, os
-sys.path.append('/home/gaelle/Ext/Julie/code/src/')
-sys.path.append('./')
+dir_path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(os.path.dirname(dir_path))
 from Matrix import *
 from Plots import *
 from Trajectories import *
@@ -216,6 +216,9 @@ MLl = []
 if not os.path.exists('./trajectories'):
         os.makedirs('./trajectories')
 
+if not os.path.exists('./final_images'):
+        os.makedirs('./final_images')
+
 for repe in npy.arange(1,nrepet,1):
     
     num = 0
@@ -337,19 +340,19 @@ for repe in npy.arange(1,nrepet,1):
     for time in npy.arange(1,nstep,1):
         time_step(time)
         if ( time == 1 ):
-            plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'traj_0.png')
+            plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_0.png')
         if (halft == 1) & (time >= nstep/2):
             halft = 0
-            plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'traj_half.png')
+            plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_half.png')
     
     if make_movie == 1:
         os.system( "ffmpeg -i image%06d.png -y movie.mp4; rm image*.png" )
     
     if 1:
-        plotte_traj(x, y, cols, xmat, ymat, chemo, time, 'traj.png')
-        plot_track(x[:,anterior], y[:,anterior], cols[anterior], 'tracks_anterior.png')
-        plot_track(x[:,posterior], y[:,posterior], cols[posterior], 'tracks_posterior.png')
-        plot_track(x[:,middle], y[:,middle], cols[middle], 'tracks_middle.png')
+        plotte_traj(x, y, cols, xmat, ymat, chemo, time, 'final_images/traj.png')
+        plot_track(x[:,anterior], y[:,anterior], cols[anterior], 'final_images/tracks_anterior.png')
+        plot_track(x[:,posterior], y[:,posterior], cols[posterior], 'final_images/tracks_posterior.png')
+        plot_track(x[:,middle], y[:,middle], cols[middle], 'final_images/tracks_middle.png')
         save_trajectory( x, y, npy.arange(1,nstep,1), repe)
     
     dep = deplacement(x,y)
@@ -360,7 +363,7 @@ for repe in npy.arange(1,nrepet,1):
     MLl = npy.r_[MLl, bbox[0], bbox[1]]
     APl = npy.r_[APl, bbox[2], bbox[3]]
 
-boxstrip( ["anterior", "middle", "posterior"], [depant, depmid, deppost], 3, [colant, colmid, colpos], 'deplacement.png', 3.75 )
-print(MLl)
-print(APl)
-boxstrip( ["AP length", "ML length"], [APl, MLl], 2, ["black", "black"], 'boundingBox.png', 10 )
+# boxstrip( ["anterior", "middle", "posterior"], [depant, depmid, deppost], 3, [colant, colmid, colpos], 'final_images/deplacement.png', 3.75 )
+# print(MLl)
+# print(APl)
+# boxstrip( ["AP length", "ML length"], [APl, MLl], 2, ["black", "black"], 'final_images/boundingBox.png', 10 )
