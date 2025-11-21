@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('cairo')
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import pylab as pyl
 import numpy as npy
@@ -14,7 +14,6 @@ def bfig():
 
 def efig_all( filename, sh ):
     """ save figure """
-    plt.show()
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
@@ -23,18 +22,25 @@ def efig_all( filename, sh ):
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
-    plt.close()
+    else:
+        plt.gca().set_aspect('equal')
+        plt.show(block=False)
+        plt.pause(2)
+        plt.close()
 
 def efig( filename, sh ):
     """ save figure """
-    plt.show()
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
-    plt.close()
+    else:
+        plt.gca().set_aspect('equal')
+        plt.show(block=False)
+        plt.pause(2)
+        plt.close()
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
     rad = d_eq/2
@@ -182,7 +188,7 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     plt.axhline( 0, color="black" )
     plt.axvline( 0, color="black" )
     
-    plt.show()
+    # plt.show()
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
