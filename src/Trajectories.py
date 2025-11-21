@@ -61,9 +61,9 @@ def column_names( filein, delim=';' ):
 		raise Exception( "Problem while loading file "+filein+" :"+str(e) )
 	return col_names
 
-def read_traj( numsim ):
+def read_traj( numsim, main_dir_path ):
     """ read trajectory file """
-    myfile = './trajectories/simu_'+str(numsim)+'.txt'
+    myfile = main_dir_path+'/trajectories/simu_'+str(numsim)+'.txt'
     #cnames = column_names( myfile, '\t' )
     #dt = dict(zip( cnames, ('float',)*len(cnames) ))
     #datas = npy.loadtxt( myfile, dt, delimiter='\t', skiprows=1 )
@@ -81,7 +81,7 @@ def load_trajectories(mydir):
     simus = []
     count = 0
     for n in nums:
-        datas = read_traj(n)
+        datas = read_traj(n,mydir)
         times = npy.concatenate((times, datas['Time']), axis=None)
         xs = npy.concatenate((xs, datas['X']), axis=None)
         ys = npy.concatenate((ys, datas['Y']), axis=None)

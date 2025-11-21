@@ -10,12 +10,15 @@ import numpy as npy
 from params import *
 n = math.floor(N / 6)
 nstep = int(math.floor(tmax / dt))
-
+dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+os.chdir(dir_path)
 
 #############################################################
 """ Main function """
+if not os.path.exists('./post_process'):
+            os.makedirs('./post_process')
 
-[simus, tracks, times, xs, ys] = load_trajectories('./')
+[simus, tracks, times, xs, ys] = load_trajectories(dir_path)
 
 
 bbtime, bbhei = bounding_box_time(simus, times, xs, ys)
@@ -47,7 +50,7 @@ for t in utrack:
             antmeany = antmeany + (y-y[0])
         n = n + 1
         anttrack = npy.concatenate( (anttrack, npy.repeat(t, len(x))), axis=None )
-plot_some_track( anttrack, antx, anty, colant, "pool_tracks_anterior.png", 10)
+plot_some_track( anttrack, antx, anty, colant, "post_process/pool_tracks_anterior.png", 10)
 antmeanx = antmeanx/n
 antmeany = antmeany/n
 
@@ -75,7 +78,7 @@ for t in utrack:
             postmeany = postmeany + (y-y[0])
         n = n + 1
         posttrack = npy.concatenate( (posttrack, npy.repeat(t, len(x))), axis=None )
-plot_some_track( posttrack, postx, posty, colpos, "pool_tracks_posterior.png", 10)
+plot_some_track( posttrack, postx, posty, colpos, "post_process/pool_tracks_posterior.png", 10)
 postmeanx = postmeanx / n
 postmeany = postmeany/n
 
@@ -103,9 +106,9 @@ for t in utrack:
             midmeany = midmeany + (y-y[0])
         n = n + 1
         midtrack = npy.concatenate( (midtrack, npy.repeat(t, len(x))), axis=None )
-plot_some_track( midtrack, midx, midy, colmid, "pool_tracks_middle.png", 10)
+plot_some_track( midtrack, midx, midy, colmid, "post_process/pool_tracks_middle.png", 10)
 midmeanx = midmeanx/n
 midmeany = midmeany/n
 
-plot_mean_track( antmeanx, antmeany, colant, postmeanx, postmeany, colpos, midmeanx, midmeany, colmid, "pool_meantracks.png")
+plot_mean_track( antmeanx, antmeany, colant, postmeanx, postmeany, colpos, midmeanx, midmeany, colmid, "post_process/pool_meantracks.png")
 

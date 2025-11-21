@@ -198,7 +198,7 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     print(''+name+' saved')
     plt.close()
 
-def plot_time_bb(time, height, filename="boundingBox_time.png"):
+def plot_time_bb(time, height, filename="post_process/boundingBox_time.png"):
     bfig()
     xtime = []
     ystd = []
@@ -212,7 +212,7 @@ def plot_time_bb(time, height, filename="boundingBox_time.png"):
     plt.errorbar(xtime, ymean, yerr=ystd)
     efig(filename, 1)
     plotdata = npy.column_stack((xtime, ymean, ystd))
-    outname = "boundingBox_time.csv"
+    outname = "post_process/boundingBox_time.csv"
     with open(outname, 'w+') as fileid:
         npy.savetxt(fileid, plotdata, header="Time\tMean\tStd", delimiter="\t")
         fileid.close()
