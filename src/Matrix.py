@@ -1,5 +1,4 @@
 import sys
-sys.path.append('/home/gaelle/Vrac/Julie/pychemoct4/')
 import math
 import numpy as npy
 from params import *

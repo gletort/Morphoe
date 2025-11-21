@@ -25,7 +25,7 @@ def efig_all( filename, sh ):
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
-        plt.pause(2)
+        plt.pause(3)
         plt.close()
 
 def efig( filename, sh ):
@@ -39,7 +39,7 @@ def efig( filename, sh ):
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
-        plt.pause(2)
+        plt.pause(3)
         plt.close()
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):

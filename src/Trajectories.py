@@ -1,5 +1,4 @@
 import sys, os, re
-sys.path.append('/home/gaelle/Ext/Julie/code/')
 import math
 import numpy as npy
 from params import *

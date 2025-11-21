@@ -1,6 +1,4 @@
 import sys, os
-sys.path.append('/home/gaelle/Ext/Julie/code/')
-sys.path.append('./')
 from Matrix import *
 from Plots import *
 from Trajectories import *
