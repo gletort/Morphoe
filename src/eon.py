@@ -204,11 +204,11 @@ def time_step(t):
 
 
 #############################################################
-def main_function(cell_cell_interaction, cell_mat_interaction, D_coeff):
+def main_function(cell_cell_interaction, cell_mat_interaction, D_coeff, cell_chem_interaction):
     """ Main function """
-    global cell_cell, cell_mat, D
+    global cell_cell, cell_mat, D, chemop
     global x, y, theta, chemo, num, nmat, xmat, ymat
-    cell_cell, cell_mat, D = cell_cell_interaction, cell_mat_interaction, D_coeff
+    cell_cell, cell_mat, D, chemop = cell_cell_interaction, cell_mat_interaction, D_coeff, cell_chem_interaction
     n = math.floor(N / 6)
     nstep = int(math.floor(tmax / dt))
     diff_cell_cell = npy.repeat(1, N)  ## cell interactions forces
@@ -374,4 +374,4 @@ def main_function(cell_cell_interaction, cell_mat_interaction, D_coeff):
     # boxstrip( ["AP length", "ML length"], [APl, MLl], 2, ["black", "black"], 'final_images/boundingBox.png', 10 )
 
 if __name__ == "__main__":
-    main_function(cell_cell, cell_mat, D)
+    main_function(cell_cell, cell_mat, D, chemop)
