@@ -199,7 +199,7 @@ def time_step(t):
 
     ## plot
     if make_movie == 1 and t%mfreq == 1:
-        plotte_traj( x, y, cols, xmat, ymat, chemo, t, 'image'+(str(num).zfill(6))+'.png' )
+        plotte_traj( x, y, cols, xmat, ymat, chemo, t, 'final_images/image'+(str(num).zfill(6))+'.png' )
         num = num + 1
 
 
@@ -207,7 +207,7 @@ def time_step(t):
 def main_function(cell_cell_interaction, cell_mat_interaction, D_coeff, cell_chem_interaction):
     """ Main function """
     global cell_cell, cell_mat, D, chemop
-    global x, y, theta, chemo, num, nmat, xmat, ymat
+    global x, y, theta, chemo, num, nmat, xmat, ymat, cols
     cell_cell, cell_mat, D, chemop = cell_cell_interaction, cell_mat_interaction, D_coeff, cell_chem_interaction
     n = math.floor(N / 6)
     nstep = int(math.floor(tmax / dt))
@@ -351,7 +351,7 @@ def main_function(cell_cell_interaction, cell_mat_interaction, D_coeff, cell_che
                 plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_half.png')
         
         if make_movie == 1:
-            os.system( "ffmpeg -i image%06d.png -y movie.mp4; rm image*.png" )
+            make_movie_with_imageio()
         
         if 1:
             plotte_traj(x, y, cols, xmat, ymat, chemo, time, 'final_images/traj.png')

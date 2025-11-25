@@ -1,7 +1,8 @@
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-import pylab as pyl
+import imageio.v2 as imageio
+import pathlib
 import numpy as npy
 import random 
 from Matrix import *
@@ -22,6 +23,8 @@ def efig_all( filename, sh ):
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
+    elif 'traj' not in filename:
+         plt.close()
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
@@ -39,7 +42,6 @@ def efig( filename, sh ):
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
-        plt.pause(3)
         plt.close()
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
@@ -198,7 +200,7 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     print(''+name+' saved')
     plt.close()
 
-def plot_time_bb(time, height, filename="post_process/boundingBox_time.png"):
+def plot_time_bb(time, height, filename="post_process/AP_size_evolution.png"):
     bfig()
     xtime = []
     ystd = []
@@ -212,7 +214,7 @@ def plot_time_bb(time, height, filename="post_process/boundingBox_time.png"):
     plt.errorbar(xtime, ymean, yerr=ystd)
     efig(filename, 1)
     plotdata = npy.column_stack((xtime, ymean, ystd))
-    outname = "post_process/boundingBox_time.csv"
+    outname = "post_process/AP_size_evolution.csv"
     with open(outname, 'w+') as fileid:
         npy.savetxt(fileid, plotdata, header="Time\tMean\tStd", delimiter="\t")
         fileid.close()
@@ -257,3 +259,20 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
     plt.locator_params(axis='y', nbins=6)
     plt.title( intitle )
     efig(filename, 1)
+
+def make_movie_with_imageio(folder='final_images', prefix="image", fps=5):
+    folder = pathlib.Path(folder)
+    images = sorted(folder.glob(f"{prefix}*.png"))
+    output = folder / "movie.mp4"
+
+    writer = imageio.get_writer(output, format='ffmpeg', fps=fps, codec='libx264')
+    for img_path in images:
+        im = imageio.imread(img_path)
+        writer.append_data(im)
+    writer.close()
+
+    # Delete images
+    for img in images:
+        img.unlink()
+
+    print("Movie saved :", output)
