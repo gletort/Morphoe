@@ -1,3 +1,5 @@
+### DEFAULT PARAMETERS ###
+### ------------------ ###
 
 ### Parameters
 N = 60  ## nb cells, /6
