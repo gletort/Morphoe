@@ -57,6 +57,6 @@ colpos = (0.1,0.1,0.5,1)
 
 make_movie = 0     ## save movie
 mfreq = 200        ## frequency of saving image
-nrepet = 16         ## nb de repetition (n+1)
+nrepet = 2         ## nb de repetition +1
 dataFreq = 50      ## frequency of saving data point
 

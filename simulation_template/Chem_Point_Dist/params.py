@@ -55,7 +55,7 @@ colant = (0.3,0.85,0.9,1) #"mediumturquoise"
 colmid = (0.25, 0.3,0.97,1) #"midnightblue"
 colpos = (0.1,0.1,0.5,1) 
 
-make_movie = 0     ## save movie
+make_movie = 1     ## save movie
 mfreq = 200        ## frequency of saving image
-nrepet = 16         ## nb de repetition (n+1)
+nrepet = 2        ## nb de repetition (n+1)
 dataFreq = 50      ## frequency of saving data point
