@@ -39,6 +39,7 @@ def efig( filename, sh ):
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
+        plt.close()
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
