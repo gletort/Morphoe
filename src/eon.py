@@ -1,6 +1,7 @@
 import sys, os
 dir_path = os.path.dirname(os.path.realpath(__file__))
-os.chdir(os.path.dirname(dir_path))
+sys.path.append(dir_path)
+sys.path.append("./")
 from Matrix import *
 from Plots import *
 from Trajectories import *
@@ -204,11 +205,18 @@ def time_step(t):
 
 
 #############################################################
-def main_function(cell_cell_interaction, cell_mat_interaction, D_coeff, cell_chem_interaction):
+def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff=None, cell_chem_interaction=None):
     """ Main function """
     global cell_cell, cell_mat, D, chemop
     global x, y, theta, chemo, num, nmat, xmat, ymat, cols
-    cell_cell, cell_mat, D, chemop = cell_cell_interaction, cell_mat_interaction, D_coeff, cell_chem_interaction
+    if cell_cell_interaction is not None:
+        cell_cell = cell_cell_interaction
+    if cell_mat_interaction is not None:
+        cell_mat = cell_mat_interaction
+    if D_coeff is not None:
+        D = D_coeff
+    if cell_chem_interaction is not None:
+        chemop = cell_chem_interaction
     n = math.floor(N / 6)
     nstep = int(math.floor(tmax / dt))
     diff_cell_cell = npy.repeat(1, N)  ## cell interactions forces
