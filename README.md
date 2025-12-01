@@ -10,7 +10,12 @@ Cells are distributed along the telencephalon and follow a chemotaxis gradient (
 
 # Installation/Usage
 
-There is no dependencies to install, you can use it directly on python (tested on python 3.8).
+Create a virtual environment, ideally on python 3.8.
+To install the dependencies, in the environment, type:
+```
+pip install -r requirements.txt
+```
+Or you can install manually each dependency.
 
 To use it, call the `eon.py` main file in the simulation directory containing your parameter file `params.py`. Templates of parameter files are given in the folder [`simulation_template`](https://github.com/gletort/Morphoe/tree/main/simulation_template) and in [our github repository associated to our publication](https://github.com/JulieBatut/Zilliox-Letort_2024/tree/main).
 
