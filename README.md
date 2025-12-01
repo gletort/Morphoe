@@ -14,7 +14,12 @@ There is no dependencies to install, you can use it directly on python (tested o
 
 To use it, call the `eon.py` main file in the simulation directory containing your parameter file `params.py`. Templates of parameter files are given in the folder [`simulation_template`](https://github.com/gletort/Morphoe/tree/main/simulation_template) and in [our github repository associated to our publication](https://github.com/JulieBatut/Zilliox-Letort_2024/tree/main).
 
-To run it, you can go inside the simulation directory and type in a Terminal:
+To run with marimo (graphical interface in the browser), in the terminal, in this repository, type:
+``` 
+marimo run src/run_simu.py
+``
+
+To run it without interface, you can go inside the simulation directory in which you put the params.py file and type in a Terminal:
 ```
 python path_to_Morphoe_src_folder/eon.py 
 ```
