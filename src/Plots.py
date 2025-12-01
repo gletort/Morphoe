@@ -7,6 +7,7 @@ import numpy as npy
 import random 
 from Matrix import *
 
+sys.path.append(".")
 from params import *
 
 def bfig():
@@ -120,11 +121,11 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
         if central_point_source:
             plt.plot( 0, ysource, color="black", marker="*", markersize=15 )
 
-    pr = 0
+    pr = 1
     if name == 'traj_half.png':
-        pr = 1
+        pr = 1-show_inter
     if name == 'traj.png':
-        pr = 1
+        pr = 1-show_inter
     efig_all(name, pr)
 
 

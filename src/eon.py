@@ -1,15 +1,16 @@
 import sys, os
+## import the source code
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path)
-sys.path.append("./")
-from Matrix import *
+from Matrix import * 
 from Plots import *
 from Trajectories import *
 from Analyse import *
 import math
 import random
 import numpy as npy
-
+## import the current simulation parameters
+sys.path.append(".")
 from params import *
 
 

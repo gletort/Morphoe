@@ -5,7 +5,7 @@ Marimo interface to run Morphoe simulations: choose parameters, create simulatio
 import marimo
 
 __generated_with = "0.8.22"
-app = marimo.App(width="medium")
+app = marimo.App(width="medium", layout_file="layouts/run_simu.grid.json")
 
 
 @app.cell
@@ -17,7 +17,7 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md("""##MORPHogenesis of Olfactory Epithelium""")
+    mo.md("""#MORPHogenesis of Olfactory Epithelium""")
     return
 
 
@@ -53,11 +53,11 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters = {}
 
     ## initial configuration
-    parameters["Nb"] = moui.slider( 6, 320, 6, 60, show_value=True )
+    parameters["N"] = moui.slider( 6, 320, 6, 60, show_value=True )
     parameters["subN"] = moui.text("[4,14,14]")
     parameters["uniform"] = moui.checkbox( True )
 
-    init_config = ""+parameter_line("Nb of cells", parameters["Nb"], "Total number of cells simulated")     
+    init_config = ""+parameter_line("Nb of cells", parameters["N"], "Total number of cells simulated")     
     init_config += ""+parameter_line("Uniform initial distribution", parameters["uniform"], "Randomly place the cells with a similar distribution along the y-axis")
     init_config += ""+parameter_line("For non uniform, precise the distribution as [anterior, middle, posterior] :", parameters["subN"], "For a non uniform distribution, precise the number of cells in each compartements: anterior, middle and posterior" )
 
@@ -69,17 +69,19 @@ def _(double_parameter_line, mo, moui, parameter_line):
     ecm_config += double_parameter_line("Coordinates: x",parameters["xecm"], ", y", parameters["yecm"], "Coordinates of the ECM remarkable point (quadratic equation)")
 
     ## simu configuration
-    parameters["dt"] = moui.number(0.0000001, 10, 0.00000001, 0.0005)
-    parameters["tmax"] = moui.slider(0,150,0.1,6, show_value=True)
+    parameters["dt"] = moui.number(0.0000001, 1, 0.00000001, 0.0005)
+    parameters["tmax"] = moui.slider(0,50,0.1,6, show_value=True)
     parameters["make_movie"] = moui.checkbox( True )
     parameters["mfreq"] = moui.number(0,2000,1,200)
-    parameters["nrepet"] = moui.slider(0,200,1,2, show_value=True)
+    parameters["dataFreq"] = moui.number(0,2000,1,10)
+    parameters["nrepet"] = moui.slider(0,100,1,2, show_value=True)
     parameters["name"] = moui.text("default")
     simu_config = ""
     simu_config += parameter_line("Simulation name: ", parameters["name"], "Give a name to the current simulation. A folder with this name will be created")
     simu_config += parameter_line("Time step: ", parameters["dt"], "Simulation time step: interval between each calculated time") 
     simu_config += parameter_line("Final time: ", parameters["tmax"], "Simulation final time")
-    simu_config += parameter_line("Saving frequency: ", parameters["mfreq"], "Save simulation state every n steps")
+    simu_config += parameter_line("Saving image frequency: ", parameters["mfreq"], "Save simulation plot every n steps")
+    simu_config += parameter_line("Saving data frequency: ", parameters["dataFreq"], "Save simulation state every n steps")
     simu_config += parameter_line("Generate movie", parameters["make_movie"], "Create a movie at the end of the simulation with all the saved time steps")
     simu_config += parameter_line("Repeat simulation", parameters["nrepet"], "Do n simulations with the same parameter set") 
 
@@ -154,6 +156,8 @@ def _(double_parameter_line, mo, moui, parameter_line):
 
     ## display para
     display_cfg = ""
+    parameters["show_inter"] = moui.checkbox(False)
+    display_cfg += parameter_line("Show intermediare plot", parameters["show_inter"], "Pops-up a window with current plot")
     parameters["antlim"] = moui.number(-20,20,0.1,1.5)
     display_cfg += parameter_line("Limit of anterior cells", parameters["antlim"], "Display cells as anterior if they were above this limit initially")
     parameters["postlim"] = moui.number(-20,20,0.1,-1.5)
@@ -203,8 +207,10 @@ def _(mo):
 
 
 @app.cell
-def _(bouton, os, parameters):
+def _(bouton, mo, os, parameters):
+    mo.redirect_stdout()
     main = os.getcwd()
+    simu_name = None
     if bouton.value:
         simu_name = parameters["name"].value
         print("Creating simulation: "+simu_name)
@@ -215,18 +221,44 @@ def _(bouton, os, parameters):
         with open(parapath, 'w') as parfile:
             parfile.write("## Parameters file for simulation "+simu_name+"\n")
             for paraname, paraval in parameters.items():
-                val = str(paraval.value)
-                ## in the parameters file, boolean are 0 or 1 values
-                if val == "True":
-                    val = "1"
-                if val == "False":
-                    val = "0"
+                ## special case: line source
+                if paraname == "line_source":
+                    if paraval.value == "No":
+                        val = "0"
+                    elif paraval.value == "Vertical":
+                        val = "1"
+                    else:
+                        val = "2"
+                    parfile.write(paraname+" = "+val+'\n')
+                    continue
+                if paraname == "subN":
+                    val = paraval.value
+                    parfile.write(paraname+" = "+val+'\n')
+                    continue
+                if paraname.startswith("col"):
+                    val = paraval.value
+                    parfile.write(paraname+" = "+val+'\n')
+                    continue
+                ## other cases
+                val = paraval.value
+                if type(val) is str:
+                    val = "\""+str(val)+"\""
+                if type(val) is int:
+                    val = str(val)
+                if type(val) is float:
+                    val = str(val)
+                if type(val) is bool:
+                    if val:
+                        val = "1"
+                    else:
+                        val = "0"
                 parfile.write(paraname+" = "+val+'\n')
 
         os.chdir(simu_name)
         print("Starting simulation...")
         from eon import main_function
         main_function()
+
         os.chdir(main)
     return (
         main,
@@ -239,6 +271,37 @@ def _(bouton, os, parameters):
         simu_name,
         val,
     )
+
+
+@app.cell
+def __(mo):
+    btn_plot = mo.ui.run_button(label="Update output")
+    btn_plot
+    return (btn_plot,)
+
+
+@app.cell
+def __(bouton, btn_plot, mo, os, parameters):
+    if btn_plot.value or bouton.value:
+        plot_fold0 = os.path.join(parameters["name"].value, "final_images")
+        mo.output.replace( mo.image(os.path.join(plot_fold0, "traj_0.png")))
+    return (plot_fold0,)
+
+
+@app.cell
+def __(btn_plot, mo, os, parameters):
+    if btn_plot.value:
+        plot_fold1 = os.path.join(parameters["name"].value, "final_images")
+        mo.output.replace( mo.image(os.path.join(plot_fold1, "traj_half.png")))
+    return (plot_fold1,)
+
+
+@app.cell
+def __(btn_plot, mo, os, parameters):
+    if btn_plot.value:
+        plot_fold = os.path.join(parameters["name"].value, "final_images")
+        mo.output.replace( mo.image(os.path.join(plot_fold, "traj.png")))
+    return (plot_fold,)
 
 
 @app.cell

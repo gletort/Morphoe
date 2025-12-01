@@ -1,6 +1,7 @@
 import sys, os, re
 import math
 import numpy as npy
+sys.path.append(".")
 from params import *
 import pandas as pd
 
