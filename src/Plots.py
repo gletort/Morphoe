@@ -1,11 +1,13 @@
 import matplotlib
-matplotlib.use('cairo')
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-import pylab as pyl
+import imageio.v2 as imageio
+import pathlib
 import numpy as npy
 import random 
 from Matrix import *
 
+sys.path.append(".")
 from params import *
 
 def bfig():
@@ -14,7 +16,6 @@ def bfig():
 
 def efig_all( filename, sh ):
     """ save figure """
-    plt.show()
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
@@ -23,18 +24,27 @@ def efig_all( filename, sh ):
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
-    plt.close()
+    elif 'traj' not in filename:
+         plt.close()
+    else:
+        plt.gca().set_aspect('equal')
+        plt.show(block=False)
+        plt.pause(3)
+        plt.close()
 
 def efig( filename, sh ):
     """ save figure """
-    plt.show()
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
-    plt.close()
+        plt.close()
+    else:
+        plt.gca().set_aspect('equal')
+        plt.show(block=False)
+        plt.close()
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
     rad = d_eq/2
@@ -111,11 +121,11 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
         if central_point_source:
             plt.plot( 0, ysource, color="black", marker="*", markersize=15 )
 
-    pr = 0
+    pr = 1
     if name == 'traj_half.png':
-        pr = 1
+        pr = 1-show_inter
     if name == 'traj.png':
-        pr = 1
+        pr = 1-show_inter
     efig_all(name, pr)
 
 
@@ -182,7 +192,7 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     plt.axhline( 0, color="black" )
     plt.axvline( 0, color="black" )
     
-    plt.show()
+    # plt.show()
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
@@ -192,7 +202,7 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     print(''+name+' saved')
     plt.close()
 
-def plot_time_bb(time, height, filename="boundingBox_time.png"):
+def plot_time_bb(time, height, filename="post_process/AP_size_evolution.png"):
     bfig()
     xtime = []
     ystd = []
@@ -206,7 +216,7 @@ def plot_time_bb(time, height, filename="boundingBox_time.png"):
     plt.errorbar(xtime, ymean, yerr=ystd)
     efig(filename, 1)
     plotdata = npy.column_stack((xtime, ymean, ystd))
-    outname = "boundingBox_time.csv"
+    outname = "post_process/AP_size_evolution.csv"
     with open(outname, 'w+') as fileid:
         npy.savetxt(fileid, plotdata, header="Time\tMean\tStd", delimiter="\t")
         fileid.close()
@@ -222,7 +232,7 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
     bfig()
     plt.subplot(splot)
     mywidth = npy.repeat( 0.75, nc )
-    bp = plt.boxplot(ys, whis='range', widths=mywidth)
+    bp = plt.boxplot(ys, widths=mywidth)
     plt.ylim(0,yl)
     for element in bp['medians']:
 	    element.set_color('grey')
@@ -251,3 +261,20 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
     plt.locator_params(axis='y', nbins=6)
     plt.title( intitle )
     efig(filename, 1)
+
+def make_movie_with_imageio(folder='final_images', prefix="image", fps=5):
+    folder = pathlib.Path(folder)
+    images = sorted(folder.glob(f"{prefix}*.png"))
+    output = folder / "movie.mp4"
+
+    writer = imageio.get_writer(output, format='ffmpeg', fps=fps, codec='libx264')
+    for img_path in images:
+        im = imageio.imread(img_path)
+        writer.append_data(im)
+    writer.close()
+
+    # Delete images
+    for img in images:
+        img.unlink()
+
+    print("Movie saved :", output)

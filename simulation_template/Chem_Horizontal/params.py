@@ -7,7 +7,7 @@ dt = 0.0005 ## time step
 tmax = 6 # 7    ## simu time
 
 chemop = 2 #2 #2    ## ampltiude of chemo force
-chemoline = 0.02  ## amplitude of chemo for lines
+chemoline = 0.005  ## amplitude of chemo for lines
 D = 0.001      ## amplitude of random motion
 v0 = 0.1     ## amplitude of polarized motion
 tau = 10     ## persistence coefficient (memory of past motion)
@@ -27,10 +27,11 @@ d_cell_mat = 0           ## if cell-matrix interactions of diffrent values
 no_ecm_adhesion = 0      ## if 1: mutant, cells cannot adhtere to matrix
 all_matrix_chemo = 0     ## all matrix (encephale) is source of chemo-attract
 
-central_point_source = 1  ## positive if central point of matrix is source
+central_point_source = 0  ## positive if central point of matrix is source
 repulsion_sources = 0    ## add repulsive sources instead of chemo attractive source
-line_source = 0         ## vertical source 1, 2 horizontal source
+line_source = 2         ## vertical source 1, 2 horizontal source
 yline  = 0              ## position of horizontal line source
+dyline = 1
 ysource  = 0              ## position of horizontal line source
 chemo_cte = 0.5          ## chemotaxis force doesn't depend on distance to the source (cte gradient)
 
@@ -55,8 +56,7 @@ colant = (0.3,0.85,0.9,1) #"mediumturquoise"
 colmid = (0.25, 0.3,0.97,1) #"midnightblue"
 colpos = (0.1,0.1,0.5,1) 
 
-make_movie = 0     ## save movie
+make_movie = 1     ## save movie
 mfreq = 200        ## frequency of saving image
-nrepet = 2         ## nb de repetition +1
+nrepet = 2         ## nb de repetition (n+1)
 dataFreq = 50      ## frequency of saving data point
-
