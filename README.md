@@ -17,7 +17,7 @@ To use it, call the `eon.py` main file in the simulation directory containing yo
 To run with marimo (graphical interface in the browser), in the terminal, in this repository, type:
 ``` 
 marimo run src/run_simu.py
-``
+```
 
 To run it without interface, you can go inside the simulation directory in which you put the params.py file and type in a Terminal:
 ```
@@ -26,7 +26,7 @@ python path_to_Morphoe_src_folder/eon.py
 
 # References
 
-Refer to our publication Zilliox, Letort et al. for more details about the model.
+Refer to our publication [Zilliox, Letort et al. 2025](https://www.cell.com/iscience/fulltext/S2589-0042(25)01659-1) for more details about the model.
 If you use this code or part of this code, please cite our publication or/and this repository.
 
 ## License
