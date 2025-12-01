@@ -43,7 +43,8 @@ def __(mo):
 
 
 @app.cell
-def __():
+def __(mo):
+    mo.md("""Simulation status:""")
     return
 
 
@@ -169,7 +170,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["colpos"] = moui.text("(0.1,0.1,0.5,1)")
     display_cfg += parameter_line("Color of posterior cells", parameters["colpos"], "Display color of posterior cells, as (r,g,b, transparency), each value between 0 and 1")
 
-    mo.accordion(
+    parameter_interface = mo.accordion(
         {
             "**Cell parameters**": mo.md( f""" {cell_config} """),
             "**Chemotaxis parameters**": mo.md( f""" {chemo_config} """),
@@ -188,76 +189,89 @@ def _(double_parameter_line, mo, moui, parameter_line):
         ecm_config,
         extra_options,
         init_config,
+        parameter_interface,
         parameters,
         simu_config,
     )
 
 
 @app.cell
-def __():
+def __(parameter_interface):
+    parameter_interface
+    return
+
+
+@app.cell
+def __(bouton):
+    bouton
     return
 
 
 @app.cell
 def _(mo):
     # Lancer le code avec les paramètres et afficher les résultats
-    bouton = mo.ui.run_button(label="Start the experiment")
-    bouton
+    bouton = mo.ui.run_button(label="Start simulation")
     return (bouton,)
 
 
 @app.cell
 def _(bouton, mo, os, parameters):
-    mo.redirect_stdout()
     main = os.getcwd()
     simu_name = None
-    if bouton.value:
-        simu_name = parameters["name"].value
-        print("Creating simulation: "+simu_name)
-        simdir = os.path.join("simus", simu_name)
-        if not os.path.exists(simu_name):
-            os.mkdir(simu_name)
-        parapath = os.path.join( simdir, "params.py")
-        with open(parapath, 'w') as parfile:
-            parfile.write("## Parameters file for simulation "+simu_name+"\n")
-            for paraname, paraval in parameters.items():
-                ## special case: line source
-                if paraname == "line_source":
-                    if paraval.value == "No":
-                        val = "0"
-                    elif paraval.value == "Vertical":
-                        val = "1"
-                    else:
-                        val = "2"
-                    parfile.write(paraname+" = "+val+'\n')
-                    continue
-                if paraname == "subN":
-                    val = paraval.value
-                    parfile.write(paraname+" = "+val+'\n')
-                    continue
-                if paraname.startswith("col"):
-                    val = paraval.value
-                    parfile.write(paraname+" = "+val+'\n')
-                    continue
-                ## other cases
-                val = paraval.value
-                if type(val) is str:
-                    val = "\""+str(val)+"\""
-                if type(val) is int:
-                    val = str(val)
-                if type(val) is float:
-                    val = str(val)
-                if type(val) is bool:
-                    if val:
-                        val = "1"
-                    else:
-                        val = "0"
-                parfile.write(paraname+" = "+val+'\n')
 
-        os.chdir(simu_name)
-        print("Starting simulation...")
+    with mo.redirect_stdout():
+        if bouton.value:
+            print("Simulation status:")
+            simu_name = parameters["name"].value
+            print("Creating simulation: "+simu_name)
+            simdir = os.path.join("simus", simu_name)
+            if not os.path.exists(simdir):
+                os.mkdir(simdir)
+            parapath = os.path.join( simdir, "params.py")
+            with open(parapath, 'w') as parfile:
+                parfile.write("## Parameters file for simulation "+simu_name+"\n")
+                for paraname, paraval in parameters.items():
+                    ## special case: line source
+                    if paraname == "line_source":
+                        if paraval.value == "No":
+                            val = "0"
+                        elif paraval.value == "Vertical":
+                            val = "1"
+                        else:
+                            val = "2"
+                        parfile.write(paraname+" = "+val+'\n')
+                        continue
+                    if paraname == "subN":
+                        val = paraval.value
+                        parfile.write(paraname+" = "+val+'\n')
+                        continue
+                    if paraname.startswith("col"):
+                        val = paraval.value
+                        parfile.write(paraname+" = "+val+'\n')
+                        continue
+                    ## other cases
+                    val = paraval.value
+                    if type(val) is str:
+                        val = "\""+str(val)+"\""
+                    if type(val) is int:
+                        val = str(val)
+                    if type(val) is float:
+                        val = str(val)
+                    if type(val) is bool:
+                        if val:
+                            val = "1"
+                        else:
+                            val = "0"
+                    parfile.write(paraname+" = "+val+'\n')
+            print("Parameter file written in "+str(simdir))
+
+    if bouton.value:
+        os.chdir(simdir)
         from eon import main_function
-        main_function()
+
+        with mo.redirect_stdout():
+            print("Starting simulation...")
+            main_function()
 
         os.chdir(main)
     return (
@@ -283,25 +297,37 @@ def __(mo):
 @app.cell
 def __(bouton, btn_plot, mo, os, parameters):
     if btn_plot.value or bouton.value:
-        plot_fold0 = os.path.join(parameters["name"].value, "final_images")
-        mo.output.replace( mo.image(os.path.join(plot_fold0, "traj_0.png")))
-    return (plot_fold0,)
+        plot_fold0 = os.path.join("simus", parameters["name"].value, "final_images")
+        plot0 = mo.output.replace(mo.md("**Initial time**"))
+        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_0.png")))
+    else:
+        plot0=None
+    plot0
+    return plot0, plot_fold0
 
 
 @app.cell
 def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
-        plot_fold1 = os.path.join(parameters["name"].value, "final_images")
-        mo.output.replace( mo.image(os.path.join(plot_fold1, "traj_half.png")))
-    return (plot_fold1,)
+        plot_fold1 = os.path.join("simus", parameters["name"].value, "final_images")
+        plot1 = mo.output.replace(mo.md("**Half time**"))
+        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_half.png")))
+    else:
+        plot1=None
+    plot1
+    return plot1, plot_fold1
 
 
 @app.cell
 def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
-        plot_fold = os.path.join(parameters["name"].value, "final_images")
-        mo.output.replace( mo.image(os.path.join(plot_fold, "traj.png")))
-    return (plot_fold,)
+        plot_fold = os.path.join("simus", parameters["name"].value, "final_images")
+        plot2 = mo.output.replace(mo.md("**Final time**"))
+        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj.png")))
+    else:
+        plot2=None
+    plot2
+    return plot2, plot_fold
 
 
 @app.cell
