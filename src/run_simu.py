@@ -214,7 +214,7 @@ def _(bouton, mo, os, parameters):
     if bouton.value:
         simu_name = parameters["name"].value
         print("Creating simulation: "+simu_name)
-        simdir = simu_name
+        simdir = os.path.join("simus", simu_name)
         if not os.path.exists(simu_name):
             os.mkdir(simu_name)
         parapath = os.path.join( simdir, "params.py")
