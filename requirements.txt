@@ -1,0 +1,4 @@
+marimo
+pillow
+imageio[ffmpeg]
+matplotlib
