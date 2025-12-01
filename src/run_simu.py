@@ -74,7 +74,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["make_movie"] = moui.checkbox( True )
     parameters["mfreq"] = moui.number(0,2000,1,200)
     parameters["dataFreq"] = moui.number(0,2000,1,10)
-    parameters["nrepet"] = moui.slider(0,100,1,2, show_value=True)
+    parameters["nrepet"] = moui.slider(0,100,1,1, show_value=True)
     parameters["name"] = moui.text("default")
     simu_config = ""
     simu_config += parameter_line("Simulation name: ", parameters["name"], "Give a name to the current simulation. A folder with this name will be created")

@@ -233,7 +233,7 @@ def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff
     if not os.path.exists('./final_images'):
             os.makedirs('./final_images')
 
-    for repe in npy.arange(1,nrepet,1):
+    for repe in npy.arange(1,nrepet+1,1):
         
         num = 0
         ### Variables

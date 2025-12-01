@@ -1,6 +1,7 @@
 import sys, os, re
 import math
 import numpy as npy
+dataFreq = 1 ## for old parameters file
 sys.path.append(".")
 from params import *
 import pandas as pd
