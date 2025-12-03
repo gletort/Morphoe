@@ -216,7 +216,8 @@ def _(mo):
 
 @app.cell
 def _(bouton, mo, os, parameters):
-    main = os.getcwd()
+    main = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    os.chdir(main)
     simu_name = None
 
     with mo.redirect_stdout():
@@ -226,7 +227,7 @@ def _(bouton, mo, os, parameters):
             print("Creating simulation: "+simu_name)
             simdir = os.path.join("simus", simu_name)
             if not os.path.exists(simdir):
-                os.mkdir(simdir)
+                os.makedirs(simdir)
             parapath = os.path.join( simdir, "params.py")
             with open(parapath, 'w') as parfile:
                 parfile.write("## Parameters file for simulation "+simu_name+"\n")
