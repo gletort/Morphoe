@@ -99,6 +99,9 @@ def time_step(t):
                             ampl = chemo_cte
                         x[t,] = x[t,] - chem*dt * (x[t-1,]-xs)/dist1 * ampl
                         y[t,] = y[t,] - chem*dt * (y[t-1,]-yl)/dist1 * ampl
+            else:
+                x[t,] = x[t,]
+                y[t,] = y[t,]
             #else:
             ## gradient of repulsion from the 2 chemo-rep sources
              #   dist1 = distancePt( x[t-1], y[t-1], source1x, source1y )
