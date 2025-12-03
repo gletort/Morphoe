@@ -296,6 +296,13 @@ def __(mo):
 
 
 @app.cell
+def __(mo):
+    post_plot = mo.ui.run_button(label="Update post-process plots")
+    post_plot
+    return (post_plot,)
+
+
+@app.cell
 def __(bouton, btn_plot, mo, os, parameters):
     if btn_plot.value or bouton.value:
         plot_fold0 = os.path.join("simus", parameters["name"].value, "final_images")
@@ -344,6 +351,62 @@ def _(quit_button):
     if quit_button.value:
         os._exit(0)
     return (os,)
+
+
+@app.cell
+def __(mo):
+    mo.md("""--- \n #Post-processing""")
+    return
+
+
+@app.cell
+def __(moui):
+    post_dir = moui.file_browser( "simus", selection_mode="directory", multiple=False, label="Choose simulation to post-process" )
+    post_dir
+    return (post_dir,)
+
+
+@app.cell
+def __(moui):
+    post_go = moui.run_button(label="Postprocess selected simulation")
+    post_go
+    return (post_go,)
+
+
+@app.cell
+def __(mo, post_dir, post_go):
+    with mo.redirect_stdout():
+        if post_go.value:
+            postsimdir = str(post_dir.path(index=0))
+            print("Postprocessing simulation:"+postsimdir)
+            from postprocess import postprocess_simu
+            postprocess_simu(postsimdir)
+    return postprocess_simu, postsimdir
+
+
+@app.cell
+def __(mo, os, post_dir, post_plot):
+    if post_plot.value:
+        postdir = str(post_dir.path(index=0))
+        plot_ant = os.path.join( postdir, "post_process" )
+        plotant = mo.output.replace(mo.md("**Mean tracks**"))
+        plotant = mo.output.append( mo.image(os.path.join(plot_ant, "pool_meantracks.png")))
+    else:
+        plotant=None
+    plotant
+    return plot_ant, plotant, postdir
+
+
+@app.cell
+def __(mo, os, plot_ant, post_plot, postdir):
+    if post_plot.value:
+        plot_ap = os.path.join( postdir, "post_process" )
+        plotap = mo.output.replace(mo.md("**Anterior-Posterior Length**"))
+        plotap = mo.output.append( mo.image(os.path.join(plot_ant, "AP_size_evolution.png")))
+    else:
+        plotap=None
+    plotap
+    return plot_ap, plotap
 
 
 if __name__ == "__main__":
