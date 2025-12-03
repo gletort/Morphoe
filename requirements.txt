@@ -2,3 +2,6 @@ marimo
 pillow
 imageio[ffmpeg]
 matplotlib
+numpy
+pandas
+pycairo
