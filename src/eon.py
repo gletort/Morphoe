@@ -354,16 +354,16 @@ def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff
         for time in npy.arange(1,nstep,1):
             time_step(time)
             if ( time == 1 ):
-                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_0.png')
+                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tStart.png')
             if (halft == 1) & (time >= nstep/2):
                 halft = 0
-                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_half.png')
+                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tHalfTime.png')
         
         if make_movie == 1:
             make_movie_with_imageio()
         
         if 1:
-            plotte_traj(x, y, cols, xmat, ymat, chemo, time, 'final_images/traj.png')
+            plotte_traj(x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tFinal.png')
             plot_track(x[:,anterior], y[:,anterior], cols[anterior], 'final_images/tracks_anterior.png')
             plot_track(x[:,posterior], y[:,posterior], cols[posterior], 'final_images/tracks_posterior.png')
             plot_track(x[:,middle], y[:,middle], cols[middle], 'final_images/tracks_middle.png')

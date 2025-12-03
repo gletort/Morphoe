@@ -300,7 +300,7 @@ def __(bouton, btn_plot, mo, os, parameters):
     if btn_plot.value or bouton.value:
         plot_fold0 = os.path.join("simus", parameters["name"].value, "final_images")
         plot0 = mo.output.replace(mo.md("**Initial time**"))
-        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_0.png")))
+        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_tStart.png")))
     else:
         plot0=None
     plot0
@@ -312,7 +312,7 @@ def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
         plot_fold1 = os.path.join("simus", parameters["name"].value, "final_images")
         plot1 = mo.output.replace(mo.md("**Half time**"))
-        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_half.png")))
+        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_tHalfTime.png")))
     else:
         plot1=None
     plot1
@@ -324,7 +324,7 @@ def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
         plot_fold = os.path.join("simus", parameters["name"].value, "final_images")
         plot2 = mo.output.replace(mo.md("**Final time**"))
-        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj.png")))
+        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj_tFinal.png")))
     else:
         plot2=None
     plot2
