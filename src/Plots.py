@@ -5,10 +5,17 @@ import imageio.v2 as imageio
 import pathlib
 import numpy as npy
 import random 
+
+import importlib
+import Matrix
+importlib.reload(Matrix)
 from Matrix import *
 
 sys.path.append(".")
+import params 
+importlib.reload(params)
 from params import *
+
 
 def bfig():
 	""" Create figure """
@@ -64,6 +71,7 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
     else:
         plt.plot( xmat, ymat, color="black", linestyle="--" )
 
+    #print(all_matrix_chemo)
     if chemo > 0:
         
         ## take all matrix point
@@ -118,7 +126,7 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
                 #    plt.plot( source2x, source2y, color="black", marker="^", markersize=10 )
                  #   if repulsion_sources >= 2:
                   #      plt.plot( source3x, source3y, color="black", marker="^", markersize=10 )
-        if central_point_source:
+        if central_point_source>0:
             plt.plot( 0, ysource, color="black", marker="*", markersize=15 )
 
     pr = 1

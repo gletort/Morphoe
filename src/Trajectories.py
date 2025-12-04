@@ -1,10 +1,13 @@
 import sys, os, re
 import math
+import pandas as pd
 import numpy as npy
 dataFreq = 1 ## for old parameters file
+import importlib
 sys.path.append(".")
+import params 
+importlib.reload(params)
 from params import *
-import pandas as pd
 
 def save_trajectory( x, y, time, repnum ):
     """ write datas to txt file """

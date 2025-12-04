@@ -1,18 +1,30 @@
-import sys, os
+import sys
+import os
+import importlib
+import math
+import random
+import numpy as npy
+
 ## import the source code
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path)
+import Matrix, Plots, Trajectories, Analyse
+importlib.reload(Matrix)
+importlib.reload(Plots)
+importlib.reload(Trajectories)
+importlib.reload(Analyse)
+
 from Matrix import * 
 from Plots import *
 from Trajectories import *
 from Analyse import *
-import math
-import random
-import numpy as npy
 ## import the current simulation parameters
 sys.path.append(".")
+import params 
+print(all_matrix_chemo)
+importlib.reload(params)
 from params import *
-
+print(all_matrix_chemo)
 
 #############################################################
 
@@ -211,7 +223,7 @@ def time_step(t):
 #############################################################
 def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff=None, cell_chem_interaction=None):
     """ Main function """
-    global cell_cell, cell_mat, D, chemop
+    #global cell_cell, cell_mat, D, chemop
     global x, y, theta, chemo, num, nmat, xmat, ymat, cols
     if cell_cell_interaction is not None:
         cell_cell = cell_cell_interaction

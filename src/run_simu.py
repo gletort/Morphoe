@@ -200,7 +200,7 @@ def _(mo):
 
 
 @app.cell
-def _(bouton, mo, os, parameters):
+def _(__file__, bouton, mo, os, parameters):
     main = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     os.chdir(main)
     simu_name = None
@@ -255,6 +255,9 @@ def _(bouton, mo, os, parameters):
 
     if bouton.value:
         os.chdir(simdir)
+        import eon
+        import importlib
+        importlib.reload(eon)
         from eon import main_function
 
         with mo.redirect_stdout():
@@ -263,6 +266,8 @@ def _(bouton, mo, os, parameters):
 
         os.chdir(main)
     return (
+        eon,
+        importlib,
         main,
         main_function,
         paraname,
@@ -394,6 +399,11 @@ def __(mo, os, plot_ant, post_plot, postdir):
         plotap=None
     plotap
     return plot_ap, plotap
+
+
+@app.cell
+def __():
+    return
 
 
 if __name__ == "__main__":

@@ -1,7 +1,10 @@
 import sys
 import math
 import numpy as npy
+import importlib
 sys.path.append(".")
+import params 
+importlib.reload(params)
 from params import *
 
 def distance(inx,iny):
