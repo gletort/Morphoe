@@ -87,7 +87,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     simu_config += parameter_line("Repeat simulation", parameters["nrepet"], "Do n simulations with the same parameter set") 
 
     ## chemotaxis parameters
-    parameters["chemop"] = moui.number(0,20,0.1,2)
+    parameters["chemop"] = moui.number(0,20,0.00001,2)
     parameters["chemoline"] = moui.number(0,20,0.001,0.02)
     parameters["all_matrix_chemo"] = moui.checkbox(False)
     parameters["central_point_source"] = moui.checkbox(True)
