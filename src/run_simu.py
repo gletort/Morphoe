@@ -17,7 +17,7 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md("""#MORPHogenesis of Olfactory Epithelium""")
+    mo.md("""#MORPHOE: MORPHogenesis of Olfactory Epithelium""")
     return
 
 
@@ -79,11 +79,11 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["name"] = moui.text("default")
     simu_config = ""
     simu_config += parameter_line("Simulation name: ", parameters["name"], "Give a name to the current simulation. A folder with this name will be created")
-    simu_config += parameter_line("Time step: ", parameters["dt"], "Simulation time step: interval between each calculated time") 
+    simu_config += parameter_line("Time step: ", parameters["dt"], "Simulation time step: interval between each calculated time")
+    simu_config += parameter_line("Saving cell position frequency: ", parameters["dataFreq"], "Save simulation state of cells positions every n steps")
     simu_config += parameter_line("Final time: ", parameters["tmax"], "Simulation final time")
-    simu_config += parameter_line("Saving image frequency: ", parameters["mfreq"], "Save simulation plot every n steps")
-    simu_config += parameter_line("Saving data frequency: ", parameters["dataFreq"], "Save simulation state every n steps")
     simu_config += parameter_line("Generate movie", parameters["make_movie"], "Create a movie at the end of the simulation with all the saved time steps")
+    simu_config += parameter_line("Saving movie image frequency: ", parameters["mfreq"], "Save simulation plot for the movie every n steps")
     simu_config += parameter_line("Repeat simulation", parameters["nrepet"], "Do n simulations with the same parameter set") 
 
     ## chemotaxis parameters
@@ -106,9 +106,9 @@ def _(double_parameter_line, mo, moui, parameter_line):
 
     ## cell parameters
     cell_config = ""
-    parameters["cell_cell"] = moui.slider(0,20,0.001,0.7, show_value=True)
+    parameters["cell_cell"] = moui.slider(0,20,0.05,0.7, show_value=True)
     cell_config += parameter_line("Strength of cell-cell interaction", parameters["cell_cell"], "Amplitude of force of attraction/repulsion between neighboring cells (within interaction threshold)")
-    parameters["cell_mat"] = moui.slider(0,100,0.01,4, show_value=True)
+    parameters["cell_mat"] = moui.slider(0,100,0.5,4, show_value=True)
     cell_config += parameter_line("Strength of cell-matrix interaction", parameters["cell_mat"], "Amplitude of force of attraction/repulsion between a cell and neighboring matrix (within interaction threshold)")
 
     parameters["d_interaction"] = moui.slider(0, 20, 0.001, 1, show_value=True)
