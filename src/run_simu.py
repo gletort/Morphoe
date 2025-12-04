@@ -66,12 +66,12 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["shape"] = moui.dropdown(options=["quadratic", "cylindric"], value="quadratic")
     parameters["xecm"] = moui.number(-6,20,0.1, 1.0)
     parameters["yecm"] = moui.number(-6,20,0.1, 3.8)
-    ecm_config = ""+parameter_line("ECM shape", parameters["shape"], "Mathematical shape of the horse-shoe like of the ECM")
-    ecm_config += double_parameter_line("Coordinates: x",parameters["xecm"], ", y", parameters["yecm"], "Coordinates of the ECM remarkable point (quadratic equation)")
+    ecm_config = ""+parameter_line("Matrix shape", parameters["shape"], "Mathematical shape of the horse-shoe like of the matrix")
+    ecm_config += double_parameter_line("Coordinates: x",parameters["xecm"], ", y", parameters["yecm"], "Coordinates of the matrix remarkable point (quadratic equation)")
 
     ## simu configuration
     parameters["dt"] = moui.number(0.0000001, 1, 0.00000001, 0.0005)
-    parameters["tmax"] = moui.slider(0,50,0.1,6, show_value=True)
+    parameters["tmax"] = moui.slider(1,50,0.1,6, show_value=True)
     parameters["make_movie"] = moui.checkbox( True )
     parameters["mfreq"] = moui.number(0,2000,1,200)
     parameters["dataFreq"] = moui.number(0,2000,1,10)
@@ -87,24 +87,20 @@ def _(double_parameter_line, mo, moui, parameter_line):
     simu_config += parameter_line("Repeat simulation", parameters["nrepet"], "Do n simulations with the same parameter set") 
 
     ## chemotaxis parameters
-    parameters["neurogenine_mutant"] = moui.checkbox(False)
     parameters["chemop"] = moui.number(0,20,0.1,2)
     parameters["chemoline"] = moui.number(0,20,0.001,0.02)
     parameters["all_matrix_chemo"] = moui.checkbox(False)
     parameters["central_point_source"] = moui.checkbox(True)
-    parameters["repulsion_sources"] = moui.checkbox(False)
     parameters["line_source"] = moui.dropdown(options=["No", "Vertical line", "Horizontal line"], value="No")
-    parameters["yline"] = moui.slider(-10,10,0.1,0, show_value=True)
+    parameters["xyline"] = moui.slider(-10,10,0.1,0, show_value=True)
     parameters["ysource"] = moui.slider(-10,10,0.1,0, show_value=True)
     parameters["chemo_cte"] = moui.slider(0,10,0.05,0.5, show_value=True)
     chemo_config = parameter_line("Chemotaxis force: ", parameters["chemop"], "Strength of chemotaxis attraction on cells")
     chemo_config += parameter_line("Chemotaxis line force:", parameters["chemoline"], "Strength of chemotaxis attraction on cells when using a line source")            
-    chemo_config += parameter_line("Neurogenine mutant", parameters["neurogenine_mutant"], "Simulate neurogenine mutant: no chemotaxis until half of the simulation when chemotaxis is put back")
-    chemo_config += parameter_line("Use all ECM as chemo source", parameters["all_matrix_chemo"], "All points inside the ECM are chemotaxis source")
+    chemo_config += parameter_line("Use all matrix as chemo source", parameters["all_matrix_chemo"], "All points inside the matrix are chemotaxis source")
     chemo_config += parameter_line("Chemotaxis source as a central point", parameters["central_point_source"], "Use only a point as chemotaxis source")
-    chemo_config += parameter_line("Use repulsion sources", parameters["repulsion_sources"], "Instead of one attractive source, put two repulsive sources")
     chemo_config += parameter_line("Line source", parameters["line_source"], "Use a line as chemotaxis source instead of a point. Choose its direction")
-    chemo_config += parameter_line("Line position", parameters["yline"], "Set the position of the line along the corresponding axis")
+    chemo_config += parameter_line("Line position", parameters["xyline"], "Set the position of the line along the corresponding axis")
     chemo_config += parameter_line("Point Y position", parameters["ysource"], "Position of the point source of chemo along the Y axis")
     chemo_config += parameter_line("Constant chemotaxis:", parameters["chemo_cte"], "if >0, consider the chemotaxis force to be the same wherever the cell is. Otherwise, it depends on the distance between the cell and the chemotaxis source.")
 
@@ -113,14 +109,14 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["cell_cell"] = moui.slider(0,20,0.001,0.7, show_value=True)
     cell_config += parameter_line("Strength of cell-cell interaction", parameters["cell_cell"], "Amplitude of force of attraction/repulsion between neighboring cells (within interaction threshold)")
     parameters["cell_mat"] = moui.slider(0,100,0.01,4, show_value=True)
-    cell_config += parameter_line("Strength of cell-ECM interaction", parameters["cell_mat"], "Amplitude of force of attraction/repulsion between a cell and neighboring ECM (within interaction threshold)")
+    cell_config += parameter_line("Strength of cell-matrix interaction", parameters["cell_mat"], "Amplitude of force of attraction/repulsion between a cell and neighboring matrix (within interaction threshold)")
 
     parameters["d_interaction"] = moui.slider(0, 20, 0.001, 1, show_value=True)
-    cell_config += parameter_line("Interaction distance", parameters["d_interaction"], "Threshold distance for cell to interact with another cell/ECM")
+    cell_config += parameter_line("Interaction distance", parameters["d_interaction"], "Threshold distance for cell to interact with another cell/matrix")
     parameters["d_eq"] = moui.slider(0, 20, 0.001, 0.5, show_value=True)
     cell_config += parameter_line("Cell diameter", parameters["d_eq"], "Equilibrium distance between two cells: ~ cell diameter")
     parameters["out"] = moui.number(0,1000,0.5,100)
-    cell_config += parameter_line("ECM inpenetrability", parameters["out"], "Strongly eject cell out of ECM if they enter it")
+    cell_config += parameter_line("matrix inpenetrability", parameters["out"], "Strongly eject cell out of matrix if they enter it")
     parameters["D"] = moui.number(0.00001, 5, 0.00001, 0.001)
     cell_config += parameter_line("Amplitude of random motion", parameters["D"], "Strength of the random motion component of each cell")
     parameters["tau"] = moui.number(0.1, 100, 0.1, 10)
@@ -137,15 +133,6 @@ def _(double_parameter_line, mo, moui, parameter_line):
     extra_options += parameter_line("Heterogenous cell-ECM interactions", parameters["d_cell_mat"], "To use cell that have different interaction strenghts with the matrix (for different cell types)")
     parameters["no_ecm_adhesion"] = moui.checkbox(False)
     extra_options += parameter_line("Non adherent cells", parameters["no_ecm_adhesion"], "Cells don't adhere to the ECM") 
-    parameters["source1x"] = moui.number(-10,10,0.05,0)
-    parameters["source1y"] = moui.number(-10,10,0.05,3.8)
-    extra_options += double_parameter_line("Multi-sources, coordinate point 1: x ", parameters["source1x"], ", y ", parameters["source1y"], "If use repulsion sources option, position of the first source")
-    parameters["source2x"] = moui.number(-10,10,0.05,-1.25)
-    parameters["source2y"] = moui.number(-10,10,0.05,-3.8)
-    extra_options += double_parameter_line("Multi-sources, coordinate point 2: x ", parameters["source2x"], ", y ", parameters["source2y"], "If use repulsion sources option, position of the second source")
-    parameters["source3x"] = moui.number(-10,10,0.05,1.25)
-    parameters["source3y"] = moui.number(-10,10,0.05,3.8)
-    extra_options += double_parameter_line("Multi-sources, coordinate point 3: x ", parameters["source3x"], ", y ", parameters["source3y"], "If use repulsion sources option, position of the thrid source")
     parameters["inhibition_zones"] = moui.checkbox(False)
     extra_options += parameter_line("Add zone of inhibition", parameters["inhibition_zones"], "Add a repulsive zone")
     parameters["inh_min"] = moui.number(-10,10,0.05,-1.5)
@@ -157,8 +144,6 @@ def _(double_parameter_line, mo, moui, parameter_line):
 
     ## display para
     display_cfg = ""
-    parameters["show_inter"] = moui.checkbox(False)
-    display_cfg += parameter_line("Show intermediare plot", parameters["show_inter"], "Pops-up a window with current plot")
     parameters["antlim"] = moui.number(-20,20,0.1,1.5)
     display_cfg += parameter_line("Limit of anterior cells", parameters["antlim"], "Display cells as anterior if they were above this limit initially")
     parameters["postlim"] = moui.number(-20,20,0.1,-1.5)
@@ -174,7 +159,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
         {
             "**Cell parameters**": mo.md( f""" {cell_config} """),
             "**Chemotaxis parameters**": mo.md( f""" {chemo_config} """),
-            "**Matrix (ECM) shape**": mo.md( f""" {ecm_config}   """),
+            "**Matrix shape**": mo.md( f""" {ecm_config}   """),
             "**Initial configuration**": mo.md( f""" {init_config} """ ),
             "**Simulation configuration**": mo.md( f""" { simu_config } """), 
             "**Display parameters**": mo.md( f""" { display_cfg } """), 
@@ -236,10 +221,12 @@ def _(bouton, mo, os, parameters):
                     if paraname == "line_source":
                         if paraval.value == "No":
                             val = "0"
-                        elif paraval.value == "Vertical":
+                        elif paraval.value == "Vertical line":
                             val = "1"
-                        else:
+                            parfile.write('dxyline = 1'+'\n') #add the dxyline parameter in case of a line source
+                        elif paraval.value == "Horizontal line":
                             val = "2"
+                            parfile.write('dxyline = 1'+'\n') #add the dxyline parameter in case of a line source 
                         parfile.write(paraname+" = "+val+'\n')
                         continue
                     if paraname == "subN":

@@ -21,9 +21,9 @@ def time_step(t):
     global x, y, theta, chemo, num, nmat
 
     chemo = chemop
-    if neurogenine_mutant > 0:
-        if t < nstep / 2:
-            chemo=0
+    # if neurogenine_mutant > 0:
+    #     if t < nstep / 2:
+    #         chemo=0
 
     ## Random motion
     # align angle to previous motion
@@ -62,8 +62,8 @@ def time_step(t):
             ## vertical line source
             if line_source == 1:
                 nx = 8
-                xinf = xline -dxline/2
-                xsup = xline + dxline/2
+                xinf = xyline -dxyline/2
+                xsup = xyline + dxyline/2
                 for xind in range(nx):
                     xl = xinf + (xsup-xinf)*xind/nx
                     ny = 50
@@ -83,8 +83,8 @@ def time_step(t):
             ## horizontal line source
             if line_source == 2:
                 ny = 8
-                yinf = yline-dyline/2
-                ysup = yline+dyline/2
+                yinf = xyline-dxyline/2
+                ysup = xyline+dxyline/2
                 for yind in range(ny):
                     yl = yinf + (ysup-yinf)*yind/ny
                     nx = 50
@@ -166,7 +166,7 @@ def time_step(t):
     y[t,close2mat] = y[t,close2mat] + dt * inter_coeff * (projy[close2mat] - y[t-1,close2mat])
 
     ## take only closer source point
-    if all_matrix_chemo == 1:
+    if all_matrix_chemo == 2:
             ampl = (1.0 / npy.power( 1+distance2mat,1 ) )
             if chemo_cte>0:
                 ampl = chemo_cte
@@ -174,7 +174,7 @@ def time_step(t):
             y[t,] = y[t,] - chemo*dt * (y[t-1,] - projy) / distance2mat * ampl 
     
     ## take all matrix point
-    if all_matrix_chemo == 2:
+    if all_matrix_chemo == 1:
         nx = 50
         ny = 100
         dy = yecm*2/ny
@@ -339,7 +339,7 @@ def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff
         
         ## initialize if all matrix point
         nmat = 0
-        if all_matrix_chemo == 2:
+        if all_matrix_chemo == 1:
             nx = 50
             ny = 100
             dy = yecm*2/ny

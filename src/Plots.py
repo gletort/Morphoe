@@ -67,7 +67,7 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
     if chemo > 0:
         
         ## take all matrix point
-        if all_matrix_chemo == 2:
+        if all_matrix_chemo == 1:
             nx = 50
             ny = 100
             dy = yecm*2/ny
@@ -86,8 +86,8 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
             ## vertical line
             if line_source == 1:
                 nx = 8
-                xinf = xline -dxline/2
-                xsup = xline + dxline/2
+                xinf = xyline -dxyline/2
+                xsup = xyline + dxyline/2
                 for xind in range(nx):
                     xl = xinf + (xsup-xinf)*xind/nx
                     ny = 50
@@ -102,8 +102,8 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
             ## horizontal line
             if line_source == 2:
                 ny = 8
-                yinf = yline-dyline/2
-                ysup = yline+dyline/2
+                yinf = xyline-dxyline/2
+                ysup = xyline+dxyline/2
                 for yind in range(ny):
                     yl = yinf + (ysup-yinf)*yind/ny
                     nx = 50
