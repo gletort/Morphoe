@@ -8,7 +8,7 @@ Cells are distributed along the telencephalon and follow a chemotaxis gradient (
 
 ![Example of a simulation](https://github.com/gletort/Morphoe/raw/main/imgs/simu.png)
 
-# Installation/Usage
+## Installation
 
 Create a virtual environment, ideally on python 3.8.
 To install the dependencies, in the environment, type:
@@ -17,9 +17,11 @@ pip install -r requirements.txt
 ```
 Or you can install manually each dependency.
 
+## Usage
+
 To use it, call the `eon.py` main file in the simulation directory containing your parameter file `params.py`. Templates of parameter files are given in the folder [`simulation_template`](https://github.com/gletort/Morphoe/tree/main/simulation_template) and in [our github repository associated to our publication](https://github.com/JulieBatut/Zilliox-Letort_2024/tree/main).
 
-To run with marimo (graphical interface in the browser), in the terminal, in this repository, type:
+To run with [marimo](https://marimo.io/) (graphical interface in the browser), in the terminal, in this repository, type:
 ``` 
 marimo run src/run_simu.py
 ```
@@ -29,9 +31,9 @@ To run it without interface, you can go inside the simulation directory in which
 python path_to_Morphoe_src_folder/eon.py 
 ```
 
-# References
+## References
 
-Refer to our initial publication [Zilliox, Letort et al. 2025](https://www.cell.com/iscience/fulltext/S2589-0042(25)01659-1) and last article (Demont, et al. 2025) for more details about the model.
+Refer to our initial publication [Zilliox, Letort et al. 2025](https://www.cell.com/iscience/fulltext/S2589-0042(25)01659-1) for more details about the model. Refer to our protocol (Demont, et al. 2025) for more details about its usage.
 If you use this code or part of this code, please cite our publication or/and this repository.
 
 ## License
