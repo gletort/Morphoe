@@ -92,8 +92,8 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["all_matrix_chemo"] = moui.checkbox(False)
     parameters["central_point_source"] = moui.checkbox(True)
     parameters["line_source"] = moui.dropdown(options=["No", "Vertical line", "Horizontal line"], value="No")
-    parameters["xyline"] = moui.slider(-10,10,0.1,0, show_value=True)
-    parameters["ysource"] = moui.slider(-10,10,0.1,0, show_value=True)
+    parameters["xyline"] = moui.slider(-2,2,0.1,0, show_value=True)
+    parameters["ysource"] = moui.slider(-2.5,4,0.1,0, show_value=True)
     parameters["chemo_cte"] = moui.slider(0,10,0.05,0.5, show_value=True)
     chemo_config = parameter_line("Chemotaxis force: ", parameters["chemop"], "Strength of chemotaxis attraction on cells")
     chemo_config += parameter_line("Chemotaxis line force:", parameters["chemoline"], "Strength of chemotaxis attraction on cells when using a line source")            
@@ -106,14 +106,14 @@ def _(double_parameter_line, mo, moui, parameter_line):
 
     ## cell parameters
     cell_config = ""
-    parameters["cell_cell"] = moui.slider(0,20,0.05,0.7, show_value=True)
+    parameters["cell_cell"] = moui.slider(0,20,0.1,0.7, show_value=True)
     cell_config += parameter_line("Strength of cell-cell interaction", parameters["cell_cell"], "Amplitude of force of attraction/repulsion between neighboring cells (within interaction threshold)")
-    parameters["cell_mat"] = moui.slider(0,100,0.5,4, show_value=True)
+    parameters["cell_mat"] = moui.slider(0,20,0.25,4, show_value=True)
     cell_config += parameter_line("Strength of cell-matrix interaction", parameters["cell_mat"], "Amplitude of force of attraction/repulsion between a cell and neighboring matrix (within interaction threshold)")
 
-    parameters["d_interaction"] = moui.slider(0, 20, 0.001, 1, show_value=True)
+    parameters["d_interaction"] = moui.slider(0, 20, 0.25, 1, show_value=True)
     cell_config += parameter_line("Interaction distance", parameters["d_interaction"], "Threshold distance for cell to interact with another cell/matrix")
-    parameters["d_eq"] = moui.slider(0, 20, 0.001, 0.5, show_value=True)
+    parameters["d_eq"] = moui.slider(0, 20, 0.25, 0.5, show_value=True)
     cell_config += parameter_line("Cell diameter", parameters["d_eq"], "Equilibrium distance between two cells: ~ cell diameter")
     parameters["out"] = moui.number(0,1000,0.5,100)
     cell_config += parameter_line("matrix inpenetrability", parameters["out"], "Strongly eject cell out of matrix if they enter it")
@@ -125,7 +125,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     cell_config += parameter_line("Amplitude of polarized motion", parameters["v0"], "Strength of directed motion, directed by cell polarization")
 
     extra_options = ""
-    parameters["push"] = moui.number(0,20,0.01,0)
+    parameters["push"] = moui.number(0,20,0.25,0)
     extra_options += parameter_line("Vertical shift", parameters["push"], "Amplitude of motion towards the top (0: non active)")
     parameters["d_cell_cell"] = moui.checkbox(False)
     extra_options += parameter_line("Heterogenous cell-cell interactions", parameters["d_cell_cell"], "To use cell that have different interaction strenghts (for different cell types)")
@@ -135,18 +135,18 @@ def _(double_parameter_line, mo, moui, parameter_line):
     extra_options += parameter_line("Non adherent cells", parameters["no_ecm_adhesion"], "Cells don't adhere to the ECM") 
     parameters["inhibition_zones"] = moui.checkbox(False)
     extra_options += parameter_line("Add zone of inhibition", parameters["inhibition_zones"], "Add a repulsive zone")
-    parameters["inh_min"] = moui.number(-10,10,0.05,-1.5)
+    parameters["inh_min"] = moui.number(-10,10,0.5,-1.5)
     extra_options += parameter_line("Inhibition zone min", parameters["inh_min"], "If there is an inhibition zone, lower limit in the Y-axis of this zone")
-    parameters["inh_max"] = moui.number(-10,10,0.05,1.5)
+    parameters["inh_max"] = moui.number(-10,10,0.5,1.5)
     extra_options += parameter_line("Inhibition zone max", parameters["inh_max"], "If there is an inhibition zone, upper limit in the Y-axis of this zone")
-    parameters["inh_coeff"] = moui.number(0,20,0.001,0.5)
+    parameters["inh_coeff"] = moui.number(0,20,0.5,0.5)
     extra_options += parameter_line("Inhibition coefficient", parameters["inh_coeff"], "If there is inhibition, strength of the repulsion")
 
     ## display para
     display_cfg = ""
-    parameters["antlim"] = moui.number(-20,20,0.1,1.5)
+    parameters["antlim"] = moui.number(-20,20,0.5,1.5)
     display_cfg += parameter_line("Limit of anterior cells", parameters["antlim"], "Display cells as anterior if they were above this limit initially")
-    parameters["postlim"] = moui.number(-20,20,0.1,-1.5)
+    parameters["postlim"] = moui.number(-20,20,0.5,-1.5)
     display_cfg += parameter_line("Limit of posterior cells", parameters["antlim"], "Display cells as posterior if they were below this limit initially")
     parameters["colant"] = moui.text("(0.3,0.85,0.9,1)")
     display_cfg += parameter_line("Color of anterior cells", parameters["colant"], "Display color of anterior cells, as (r,g,b, transparency), each value between 0 and 1")
