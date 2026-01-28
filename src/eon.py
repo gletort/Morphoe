@@ -21,10 +21,8 @@ from Analyse import *
 ## import the current simulation parameters
 sys.path.append(".")
 import params 
-print(all_matrix_chemo)
 importlib.reload(params)
 from params import *
-print(all_matrix_chemo)
 
 #############################################################
 

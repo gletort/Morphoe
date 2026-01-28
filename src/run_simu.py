@@ -89,17 +89,19 @@ def _(double_parameter_line, mo, moui, parameter_line):
     ## chemotaxis parameters
     parameters["chemop"] = moui.number(0,20,0.00001,2)
     parameters["chemoline"] = moui.number(0,20,0.001,0.02)
-    parameters["all_matrix_chemo"] = moui.checkbox(False)
-    parameters["central_point_source"] = moui.checkbox(True)
-    parameters["line_source"] = moui.dropdown(options=["No", "Vertical line", "Horizontal line"], value="No")
+    parameters["chem_source"] = moui.dropdown(options=["Point source", "Vertical line", "Horizontal line", "All matrix"], value="Point source")
+    # parameters["all_matrix_chemo"] = moui.checkbox(False)
+    # parameters["central_point_source"] = moui.checkbox(True)
+    # parameters["line_source"] = moui.dropdown(options=["No", "Vertical line", "Horizontal line"], value="No")
     parameters["xyline"] = moui.slider(-2,2,0.1,0, show_value=True)
     parameters["ysource"] = moui.slider(-2.5,4,0.1,0, show_value=True)
     parameters["chemo_cte"] = moui.slider(0,10,0.05,0.5, show_value=True)
     chemo_config = parameter_line("Chemotaxis force: ", parameters["chemop"], "Strength of chemotaxis attraction on cells")
-    chemo_config += parameter_line("Chemotaxis line force:", parameters["chemoline"], "Strength of chemotaxis attraction on cells when using a line source")            
-    chemo_config += parameter_line("Use all matrix as chemo source", parameters["all_matrix_chemo"], "All points inside the matrix are chemotaxis source")
-    chemo_config += parameter_line("Chemotaxis source as a central point", parameters["central_point_source"], "Use only a point as chemotaxis source")
-    chemo_config += parameter_line("Line source", parameters["line_source"], "Use a line as chemotaxis source instead of a point. Choose its direction")
+    chemo_config += parameter_line("Chemotaxis line force:", parameters["chemoline"], "Strength of chemotaxis attraction on cells when using a line source")
+    chemo_config += parameter_line("Type of chemotaxis source", parameters["chem_source"], "Define the type of chemotaxis source")     
+    # chemo_config += parameter_line("Use all matrix as chemo source", parameters["all_matrix_chemo"], "All points inside the matrix are chemotaxis source")
+    # chemo_config += parameter_line("Chemotaxis source as a central point", parameters["central_point_source"], "Use only a point as chemotaxis source")
+    # chemo_config += parameter_line("Line source", parameters["line_source"], "Use a line as chemotaxis source instead of a point. Choose its direction")
     chemo_config += parameter_line("Line position", parameters["xyline"], "Set the position of the line along the corresponding axis")
     chemo_config += parameter_line("Point Y position", parameters["ysource"], "Position of the point source of chemo along the Y axis")
     chemo_config += parameter_line("Constant chemotaxis:", parameters["chemo_cte"], "if >0, consider the chemotaxis force to be the same wherever the cell is. Otherwise, it depends on the distance between the cell and the chemotaxis source.")
@@ -217,16 +219,29 @@ def _(__file__, bouton, mo, os, parameters):
             with open(parapath, 'w') as parfile:
                 parfile.write("## Parameters file for simulation "+simu_name+"\n")
                 for paraname, paraval in parameters.items():
-                    ## special case: line source
-                    if paraname == "line_source":
-                        if paraval.value == "No":
-                            val = "0"
+                    # special case: Chemotaxis source
+                    if paraname == "chem_source":
+                        if paraval.value == "Point source":
+                            parfile.write('all_matrix_chemo = 0'+'\n')
+                            parfile.write('central_point_source = 1'+'\n')
+                            parfile.write('line_source = 0'+'\n')
                         elif paraval.value == "Vertical line":
-                            val = "1"
-                            parfile.write('dxyline = 1'+'\n') #add the dxyline parameter in case of a line source
+                            parfile.write('all_matrix_chemo = 0'+'\n')
+                            parfile.write('central_point_source = 0'+'\n')
+                            parfile.write('line_source = 1'+'\n')
+                            parfile.write('dxyline = 1'+'\n')
                         elif paraval.value == "Horizontal line":
-                            val = "2"
-                            parfile.write('dxyline = 1'+'\n') #add the dxyline parameter in case of a line source 
+                            parfile.write('all_matrix_chemo = 0'+'\n')
+                            parfile.write('central_point_source = 0'+'\n')
+                            parfile.write('line_source = 2'+'\n')
+                            parfile.write('dxyline = 1'+'\n')
+                        elif paraval.value == "All matrix":
+                            parfile.write('all_matrix_chemo = 1'+'\n')
+                            parfile.write('central_point_source = 0'+'\n')
+                            parfile.write('line_source = 0'+'\n')
+                            parfile.write('line_source = 0'+'\n')
+                        val = paraval.value
+                        val = "\""+str(val)+"\""
                         parfile.write(paraname+" = "+val+'\n')
                         continue
                     if paraname == "subN":
