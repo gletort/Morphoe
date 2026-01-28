@@ -16,7 +16,7 @@ def distancePt(inx,iny, x2, y2):
     return npy.sqrt( (inx-x2)*(inx-x2) + (iny-y2)*(iny-y2) )
 
 def matrice(inv, shape, add=0):
-    ## definition of the "matrix" shape: encephale
+    """ definition of the "matrix" shape: encephale """
     if shape == 'quadratic':
         yaecm = yecm + add
         xaecm = xecm + add
@@ -37,19 +37,19 @@ def matrice(inv, shape, add=0):
     return res
 
 def xmatricepoint( y, shape ):
-    ## get x coordinates for y
+    """ get x coordinates for y """
     if shape == 'quadratic':
         x = npy.sqrt( abs(y - yecm) / (yecm / (xecm*xecm)) )
     return x
 
 def ymatricepoint( x, shape ):
-    ## get x coordinates for y
+    """ get x coordinates for y """
     if shape == 'quadratic':
         y = x*x * (-yecm/(xecm*xecm)) + yecm
     return y
 
 def dematrice( y0, shape, add, N, limH=N/2):
-    ## definition of the "matrix" shape: encephale
+    """ definition of the "matrix" shape: encephale """
     if shape == 'quadratic':
         #yecm = 3.8
         #xecm = 1.0

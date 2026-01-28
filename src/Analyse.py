@@ -4,14 +4,14 @@ import math
 import numpy as npy
 
 def deplacement( inx, iny ):
-    """ pos finale - pos initiale """
+    """ final position - initial position """
     last = len(inx)-1
     depx = (inx[last,]-inx[0,]) 
     depy = (iny[last,]-iny[0,]) 
     return npy.sqrt( depx*depx + depy*depy )
 
 def bounding_box( inx, iny ):
-    """ largeur et hauteur finale des c """
+    """ final cell width and heigth """
     last = len(inx)-1
     left = inx[0] < 0
     right = inx[0] >= 0
@@ -22,7 +22,7 @@ def bounding_box( inx, iny ):
     return [posx, negx, posy, negy]
 
 def bb_time( intime, inx, iny ):
-    """ largeur et hauteur de la bounding box in time """
+    """ width and height of the bounding box in time """
     width = npy.array([0.0]*len(npy.unique(intime)))
     height = npy.array([0.0]*len(npy.unique(intime)))
     time = npy.array([0.0]*len(npy.unique(intime)))

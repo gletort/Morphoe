@@ -54,6 +54,7 @@ def efig( filename, sh ):
         plt.close()
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
+    """ plot cell trajectories """
     rad = d_eq/2
     bfig()
     fig = plt.gcf()

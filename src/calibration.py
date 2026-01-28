@@ -28,7 +28,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    # Lancer le code avec les paramètres et afficher les résultats
+    # Run the code with the parameters and display the results
     bouton = mo.ui.run_button(label="Start the experiment")
     bouton
     return (bouton,)
