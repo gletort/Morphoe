@@ -18,8 +18,8 @@ from params import *
 
 
 def bfig():
-	""" Create figure """
-	fig = plt.figure(dpi=300)
+    """ Create figure """
+    fig = plt.figure(dpi=300)
 
 def efig_all( filename, sh ):
     """ save figure """
@@ -32,12 +32,12 @@ def efig_all( filename, sh ):
     if sh:
         print(''+filename+' saved')
     elif 'traj' not in filename:
-         plt.close()
+        pass
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
         plt.pause(3)
-        plt.close()
+    plt.close(fig)
 
 def efig( filename, sh ):
     """ save figure """
@@ -47,15 +47,15 @@ def efig( filename, sh ):
     fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
-        plt.close()
     else:
         plt.gca().set_aspect('equal')
         plt.show(block=False)
-        plt.close()
+    plt.close(fig)
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
+    """ plot cell trajectories """
     rad = d_eq/2
-    bfig()
+    # bfig()
     fig = plt.gcf()
     ax = fig.gca()
     for i in range(len(x[0,])):
@@ -135,6 +135,7 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
     if name == 'traj.png':
         pr = 1-show_inter
     efig_all(name, pr)
+    plt.close()
 
 
 def plot_track(x,y, colors, name):
@@ -151,6 +152,7 @@ def plot_track(x,y, colors, name):
     plt.axhline( 0, color="black" )
     plt.axvline( 0, color="black" )
     efig_all(name, 1)
+    plt.close()
 
 def plot_some_track(track, xs, ys, col, name, ntrack):
     bfig()
@@ -174,6 +176,7 @@ def plot_some_track(track, xs, ys, col, name, ntrack):
     plt.axhline( 0, color="black" )
     plt.axvline( 0, color="black" )
     efig_all(name, 1)
+    plt.close()
 
 def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, mtrackmy, colm, name):
     bfig()
@@ -223,6 +226,7 @@ def plot_time_bb(time, height, filename="post_process/AP_size_evolution.png"):
         xtime.append(t/maxt)
     plt.errorbar(xtime, ymean, yerr=ystd)
     efig(filename, 1)
+    plt.close()
     plotdata = npy.column_stack((xtime, ymean, ystd))
     outname = "post_process/AP_size_evolution.csv"
     with open(outname, 'w+') as fileid:
@@ -243,25 +247,24 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
     bp = plt.boxplot(ys, widths=mywidth)
     plt.ylim(0,yl)
     for element in bp['medians']:
-	    element.set_color('grey')
-	    element.set_linewidth(5)
+        element.set_color('grey')
+        element.set_linewidth(5)
     for element in bp['boxes']:
-	    element.set_color('grey')
-	    #element.set_facecolor('yellow')
-	    element.set_linewidth(3)
-	    element.set_linestyle('solid')
+        element.set_color('grey')
+        #element.set_facecolor('yellow')
+        element.set_linewidth(3)
+        element.set_linestyle('solid')
 	    #element.set_fill(True)
 	    #element.set_hatch('/')
     for element in bp['whiskers']:
-	    element.set_color('grey')
-	    element.set_linewidth(3)		
-    for element in bp['caps']:	
-	    element.set_color('grey')
-
+        element.set_color('grey')
+        element.set_linewidth(3)
+    for element in bp['caps']:
+        element.set_color('grey')
     for i in range(nc):
-	    ycur = ys[i]
-	    xcur = npy.random.normal(i+1, 0.2, len(ycur))
-	    plt.plot(xcur, ycur, mycol[i], ls='None', marker='o', markersize=9)
+        ycur = ys[i]
+        xcur = npy.random.normal(i+1, 0.2, len(ycur))
+        plt.plot(xcur, ycur, mycol[i], ls='None', marker='o', markersize=9)
 
     plt.xticks([])
     plt.xlabel( xname )
@@ -269,6 +272,7 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
     plt.locator_params(axis='y', nbins=6)
     plt.title( intitle )
     efig(filename, 1)
+    plt.close()
 
 def make_movie_with_imageio(folder='final_images', prefix="image", fps=5):
     folder = pathlib.Path(folder)

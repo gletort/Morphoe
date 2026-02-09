@@ -76,6 +76,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["mfreq"] = moui.number(0,2000,1,200)
     parameters["dataFreq"] = moui.number(0,2000,1,10)
     parameters["nrepet"] = moui.slider(0,100,1,1, show_value=True)
+    parameters["extension"] = moui.dropdown(options=["png", "svg", "jpg", "jpeg", "webp"], value="png")
     parameters["name"] = moui.text("default")
     simu_config = ""
     simu_config += parameter_line("Simulation name: ", parameters["name"], "Give a name to the current simulation. A folder with this name will be created")
@@ -84,36 +85,39 @@ def _(double_parameter_line, mo, moui, parameter_line):
     simu_config += parameter_line("Final time: ", parameters["tmax"], "Simulation final time")
     simu_config += parameter_line("Generate movie", parameters["make_movie"], "Create a movie at the end of the simulation with all the saved time steps")
     simu_config += parameter_line("Saving movie image frequency: ", parameters["mfreq"], "Save simulation plot for the movie every n steps")
+    simu_config += parameter_line("Image extension: ", parameters["extension"], "Choose the extension type for the saved images")
     simu_config += parameter_line("Repeat simulation", parameters["nrepet"], "Do n simulations with the same parameter set") 
 
     ## chemotaxis parameters
     parameters["chemop"] = moui.number(0,20,0.00001,2)
     parameters["chemoline"] = moui.number(0,20,0.001,0.02)
-    parameters["all_matrix_chemo"] = moui.checkbox(False)
-    parameters["central_point_source"] = moui.checkbox(True)
-    parameters["line_source"] = moui.dropdown(options=["No", "Vertical line", "Horizontal line"], value="No")
-    parameters["xyline"] = moui.slider(-10,10,0.1,0, show_value=True)
-    parameters["ysource"] = moui.slider(-10,10,0.1,0, show_value=True)
+    parameters["chem_source"] = moui.dropdown(options=["Point source", "Vertical line", "Horizontal line", "All matrix"], value="Point source")
+    # parameters["all_matrix_chemo"] = moui.checkbox(False)
+    # parameters["central_point_source"] = moui.checkbox(True)
+    # parameters["line_source"] = moui.dropdown(options=["No", "Vertical line", "Horizontal line"], value="No")
+    parameters["xyline"] = moui.slider(-2,2,0.1,0, show_value=True)
+    parameters["ysource"] = moui.slider(-2.5,4,0.1,0, show_value=True)
     parameters["chemo_cte"] = moui.slider(0,10,0.05,0.5, show_value=True)
     chemo_config = parameter_line("Chemotaxis force: ", parameters["chemop"], "Strength of chemotaxis attraction on cells")
-    chemo_config += parameter_line("Chemotaxis line force:", parameters["chemoline"], "Strength of chemotaxis attraction on cells when using a line source")            
-    chemo_config += parameter_line("Use all matrix as chemo source", parameters["all_matrix_chemo"], "All points inside the matrix are chemotaxis source")
-    chemo_config += parameter_line("Chemotaxis source as a central point", parameters["central_point_source"], "Use only a point as chemotaxis source")
-    chemo_config += parameter_line("Line source", parameters["line_source"], "Use a line as chemotaxis source instead of a point. Choose its direction")
+    chemo_config += parameter_line("Chemotaxis line force:", parameters["chemoline"], "Strength of chemotaxis attraction on cells when using a line source")
+    chemo_config += parameter_line("Type of chemotaxis source", parameters["chem_source"], "Define the type of chemotaxis source")     
+    # chemo_config += parameter_line("Use all matrix as chemo source", parameters["all_matrix_chemo"], "All points inside the matrix are chemotaxis source")
+    # chemo_config += parameter_line("Chemotaxis source as a central point", parameters["central_point_source"], "Use only a point as chemotaxis source")
+    # chemo_config += parameter_line("Line source", parameters["line_source"], "Use a line as chemotaxis source instead of a point. Choose its direction")
     chemo_config += parameter_line("Line position", parameters["xyline"], "Set the position of the line along the corresponding axis")
     chemo_config += parameter_line("Point Y position", parameters["ysource"], "Position of the point source of chemo along the Y axis")
     chemo_config += parameter_line("Constant chemotaxis:", parameters["chemo_cte"], "if >0, consider the chemotaxis force to be the same wherever the cell is. Otherwise, it depends on the distance between the cell and the chemotaxis source.")
 
     ## cell parameters
     cell_config = ""
-    parameters["cell_cell"] = moui.slider(0,20,0.05,0.7, show_value=True)
+    parameters["cell_cell"] = moui.slider(0,20,0.1,0.7, show_value=True)
     cell_config += parameter_line("Strength of cell-cell interaction", parameters["cell_cell"], "Amplitude of force of attraction/repulsion between neighboring cells (within interaction threshold)")
-    parameters["cell_mat"] = moui.slider(0,100,0.5,4, show_value=True)
+    parameters["cell_mat"] = moui.slider(0,20,0.25,4, show_value=True)
     cell_config += parameter_line("Strength of cell-matrix interaction", parameters["cell_mat"], "Amplitude of force of attraction/repulsion between a cell and neighboring matrix (within interaction threshold)")
 
-    parameters["d_interaction"] = moui.slider(0, 20, 0.001, 1, show_value=True)
+    parameters["d_interaction"] = moui.slider(0, 20, 0.25, 1, show_value=True)
     cell_config += parameter_line("Interaction distance", parameters["d_interaction"], "Threshold distance for cell to interact with another cell/matrix")
-    parameters["d_eq"] = moui.slider(0, 20, 0.001, 0.5, show_value=True)
+    parameters["d_eq"] = moui.slider(0, 20, 0.25, 0.5, show_value=True)
     cell_config += parameter_line("Cell diameter", parameters["d_eq"], "Equilibrium distance between two cells: ~ cell diameter")
     parameters["out"] = moui.number(0,1000,0.5,100)
     cell_config += parameter_line("matrix inpenetrability", parameters["out"], "Strongly eject cell out of matrix if they enter it")
@@ -125,7 +129,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     cell_config += parameter_line("Amplitude of polarized motion", parameters["v0"], "Strength of directed motion, directed by cell polarization")
 
     extra_options = ""
-    parameters["push"] = moui.number(0,20,0.01,0)
+    parameters["push"] = moui.number(0,20,0.25,0)
     extra_options += parameter_line("Vertical shift", parameters["push"], "Amplitude of motion towards the top (0: non active)")
     parameters["d_cell_cell"] = moui.checkbox(False)
     extra_options += parameter_line("Heterogenous cell-cell interactions", parameters["d_cell_cell"], "To use cell that have different interaction strenghts (for different cell types)")
@@ -135,18 +139,18 @@ def _(double_parameter_line, mo, moui, parameter_line):
     extra_options += parameter_line("Non adherent cells", parameters["no_ecm_adhesion"], "Cells don't adhere to the ECM") 
     parameters["inhibition_zones"] = moui.checkbox(False)
     extra_options += parameter_line("Add zone of inhibition", parameters["inhibition_zones"], "Add a repulsive zone")
-    parameters["inh_min"] = moui.number(-10,10,0.05,-1.5)
+    parameters["inh_min"] = moui.number(-10,10,0.5,-1.5)
     extra_options += parameter_line("Inhibition zone min", parameters["inh_min"], "If there is an inhibition zone, lower limit in the Y-axis of this zone")
-    parameters["inh_max"] = moui.number(-10,10,0.05,1.5)
+    parameters["inh_max"] = moui.number(-10,10,0.5,1.5)
     extra_options += parameter_line("Inhibition zone max", parameters["inh_max"], "If there is an inhibition zone, upper limit in the Y-axis of this zone")
-    parameters["inh_coeff"] = moui.number(0,20,0.001,0.5)
+    parameters["inh_coeff"] = moui.number(0,20,0.5,0.5)
     extra_options += parameter_line("Inhibition coefficient", parameters["inh_coeff"], "If there is inhibition, strength of the repulsion")
 
     ## display para
     display_cfg = ""
-    parameters["antlim"] = moui.number(-20,20,0.1,1.5)
+    parameters["antlim"] = moui.number(-20,20,0.5,1.5)
     display_cfg += parameter_line("Limit of anterior cells", parameters["antlim"], "Display cells as anterior if they were above this limit initially")
-    parameters["postlim"] = moui.number(-20,20,0.1,-1.5)
+    parameters["postlim"] = moui.number(-20,20,0.5,-1.5)
     display_cfg += parameter_line("Limit of posterior cells", parameters["antlim"], "Display cells as posterior if they were below this limit initially")
     parameters["colant"] = moui.text("(0.3,0.85,0.9,1)")
     display_cfg += parameter_line("Color of anterior cells", parameters["colant"], "Display color of anterior cells, as (r,g,b, transparency), each value between 0 and 1")
@@ -217,16 +221,29 @@ def _(__file__, bouton, mo, os, parameters):
             with open(parapath, 'w') as parfile:
                 parfile.write("## Parameters file for simulation "+simu_name+"\n")
                 for paraname, paraval in parameters.items():
-                    ## special case: line source
-                    if paraname == "line_source":
-                        if paraval.value == "No":
-                            val = "0"
+                    # special case: Chemotaxis source
+                    if paraname == "chem_source":
+                        if paraval.value == "Point source":
+                            parfile.write('all_matrix_chemo = 0'+'\n')
+                            parfile.write('central_point_source = 1'+'\n')
+                            parfile.write('line_source = 0'+'\n')
                         elif paraval.value == "Vertical line":
-                            val = "1"
-                            parfile.write('dxyline = 1'+'\n') #add the dxyline parameter in case of a line source
+                            parfile.write('all_matrix_chemo = 0'+'\n')
+                            parfile.write('central_point_source = 0'+'\n')
+                            parfile.write('line_source = 1'+'\n')
+                            parfile.write('dxyline = 1'+'\n')
                         elif paraval.value == "Horizontal line":
-                            val = "2"
-                            parfile.write('dxyline = 1'+'\n') #add the dxyline parameter in case of a line source 
+                            parfile.write('all_matrix_chemo = 0'+'\n')
+                            parfile.write('central_point_source = 0'+'\n')
+                            parfile.write('line_source = 2'+'\n')
+                            parfile.write('dxyline = 1'+'\n')
+                        elif paraval.value == "All matrix":
+                            parfile.write('all_matrix_chemo = 1'+'\n')
+                            parfile.write('central_point_source = 0'+'\n')
+                            parfile.write('line_source = 0'+'\n')
+                            parfile.write('line_source = 0'+'\n')
+                        val = paraval.value
+                        val = "\""+str(val)+"\""
                         parfile.write(paraname+" = "+val+'\n')
                         continue
                     if paraname == "subN":
@@ -299,7 +316,7 @@ def __(bouton, btn_plot, mo, os, parameters):
     if btn_plot.value or bouton.value:
         plot_fold0 = os.path.join("simus", parameters["name"].value, "final_images")
         plot0 = mo.output.replace(mo.md("**Initial time**"))
-        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_tStart.png")))
+        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_tStart."+parameters["extension"].value)))
     else:
         plot0=None
     plot0
@@ -311,7 +328,7 @@ def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
         plot_fold1 = os.path.join("simus", parameters["name"].value, "final_images")
         plot1 = mo.output.replace(mo.md("**Half time**"))
-        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_tHalfTime.png")))
+        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_tHalfTime."+parameters["extension"].value)))
     else:
         plot1=None
     plot1
@@ -323,7 +340,7 @@ def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
         plot_fold = os.path.join("simus", parameters["name"].value, "final_images")
         plot2 = mo.output.replace(mo.md("**Final time**"))
-        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj_tFinal.png")))
+        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj_tFinal."+parameters['extension'].value)))
     else:
         plot2=None
     plot2
@@ -377,12 +394,12 @@ def __(mo, post_dir, post_go):
 
 
 @app.cell
-def __(mo, os, post_dir, post_plot):
+def __(mo, os, post_dir, post_plot, parameters):
     if post_plot.value:
         postdir = str(post_dir.path(index=0))
         plot_ant = os.path.join( postdir, "post_process" )
         plotant = mo.output.replace(mo.md("**Mean tracks**"))
-        plotant = mo.output.append( mo.image(os.path.join(plot_ant, "pool_meantracks.png")))
+        plotant = mo.output.append( mo.image(os.path.join(plot_ant, "pool_meantracks."+parameters["extension"].value)))
     else:
         plotant=None
     plotant
@@ -390,11 +407,11 @@ def __(mo, os, post_dir, post_plot):
 
 
 @app.cell
-def __(mo, os, plot_ant, post_plot, postdir):
+def __(mo, os, plot_ant, post_plot, postdir, parameters):
     if post_plot.value:
         plot_ap = os.path.join( postdir, "post_process" )
         plotap = mo.output.replace(mo.md("**Anterior-Posterior Length**"))
-        plotap = mo.output.append( mo.image(os.path.join(plot_ant, "AP_size_evolution.png")))
+        plotap = mo.output.append( mo.image(os.path.join(plot_ant, "AP_size_evolution."+parameters["extension"].value)))
     else:
         plotap=None
     plotap

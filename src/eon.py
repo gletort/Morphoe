@@ -21,10 +21,8 @@ from Analyse import *
 ## import the current simulation parameters
 sys.path.append(".")
 import params 
-print(all_matrix_chemo)
 importlib.reload(params)
 from params import *
-print(all_matrix_chemo)
 
 #############################################################
 
@@ -224,7 +222,7 @@ def time_step(t):
 def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff=None, cell_chem_interaction=None):
     """ Main function """
     #global cell_cell, cell_mat, D, chemop
-    global x, y, theta, chemo, num, nmat, xmat, ymat, cols
+    global x, y, theta, chemo, num, nmat, xmat, ymat, cols, N
     if cell_cell_interaction is not None:
         cell_cell = cell_cell_interaction
     if cell_mat_interaction is not None:
@@ -233,6 +231,8 @@ def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff
         D = D_coeff
     if cell_chem_interaction is not None:
         chemop = cell_chem_interaction
+    if not uniform:
+        N = subN[0]+subN[1]+subN[2]
     n = math.floor(N / 6)
     nstep = int(math.floor(tmax / dt))
     diff_cell_cell = npy.repeat(1, N)  ## cell interactions forces
@@ -369,19 +369,19 @@ def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff
         for time in npy.arange(1,nstep,1):
             time_step(time)
             if ( time == 1 ):
-                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tStart.png')
+                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tStart.'+extension)
             if (halft == 1) & (time >= nstep/2):
                 halft = 0
-                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tHalfTime.png')
+                plotte_traj( x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tHalfTime.'+extension)
         
         if make_movie == 1:
             make_movie_with_imageio()
         
         if 1:
-            plotte_traj(x, y, cols, xmat, ymat, chemo, time, 'final_images/traj_tFinal.png')
-            plot_track(x[:,anterior], y[:,anterior], cols[anterior], 'final_images/tracks_anterior.png')
-            plot_track(x[:,posterior], y[:,posterior], cols[posterior], 'final_images/tracks_posterior.png')
-            plot_track(x[:,middle], y[:,middle], cols[middle], 'final_images/tracks_middle.png')
+            plotte_traj(x, y, cols, xmat, ymat, chemo, time, str('final_images/traj_tFinal.'+extension))
+            plot_track(x[:,anterior], y[:,anterior], cols[anterior], 'final_images/tracks_anterior.'+extension)
+            plot_track(x[:,posterior], y[:,posterior], cols[posterior], 'final_images/tracks_posterior.'+extension)
+            plot_track(x[:,middle], y[:,middle], cols[middle], 'final_images/tracks_middle.'+extension)
             save_trajectory( x, y, npy.arange(1,nstep,1), repe)
         
         dep = deplacement(x,y)

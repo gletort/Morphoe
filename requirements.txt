@@ -1,8 +1,6 @@
-marimo
-pillow
-imageio[ffmpeg]
-matplotlib
-numpy
-pandas
-pycairo
-importlib
+marimo == 0.08.22
+imageio[ffmpeg] == 2.33.1
+matplotlib == 3.7.5
+numpy == 1.24.4
+pandas == 2.0.3
+pycairo == 1.26.1
