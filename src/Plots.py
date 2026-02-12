@@ -23,7 +23,23 @@ def bfig():
     fig = plt.figure(dpi=300)
 
 def efig_all( filename, sh ):
-    """ save figure """
+    """ 
+    Save the current matplotlib figure with standardized formatting and layout.
+    
+    This function prepares and saves the current figure with predefined subplot
+    adjustments, tight layout, and fixed axis limits. It supports multiple output
+    formats and provides optional display functionality for trajectory plots.
+    
+    Parameters
+    ----------
+    :param filename : str
+        Path and filename for saving the figure. The file extension determines
+        the output format (e.g., '.png', '.svg', '.pdf', '.jpg').
+    :param sh : bool or int
+        Control flag for display behavior:
+        - If True/non-zero: Print save confirmation message
+        - If False/zero: Conditional display for trajectory plots
+    """
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
@@ -60,7 +76,37 @@ def efig( filename, sh ):
     plt.close(fig)
     
 def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
-    """ plot cell trajectories """
+    """
+    Plot cell trajectories with current positions and matrix structure.
+    
+    Creates a comprehensive visualization of cell migration by
+    displaying complete trajectories, current cell positions, and the 
+    underlying extracellular matrix (ECM) structure. It supports various
+    chemotactic source visualizations and customizable styling.
+    
+    Parameters
+    ----------
+    :param x : numpy.ndarray
+        Array of shape (nstep, N) containing x-coordinates of all cells at each time step
+    :param y : numpy.ndarray
+        Array of shape (nstep, N) containing y-coordinates of all cells at each time step
+    :param colors : array-like
+        Array of length N containing color specifications for each cell
+    :param xmat : array-like
+        X-coordinates defining the extracellular matrix structure
+    :param ymat : array-like
+        Y-coordinates defining the extracellular matrix structure
+    :param chemo : float
+        Chemotactic sensitivity coefficient (used to determine if sources should be shown)
+    :param time : int
+        Current time step index to display final positions
+    :param name : str
+        Filename for saving the plot (including extension)
+    :param msize : int, optional
+        Marker size for initial cell positions (default: 7)
+    :param linew : int, optional
+        Line width for trajectory paths (default: 2)
+    """ 
     rad = d_eq/2
     # bfig()
     fig = plt.gcf()
@@ -146,6 +192,15 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
 
 
 def plot_track(x,y, colors, name):
+    """
+    Draw the tracks defined by the x,y coordinates on the matplotlib plot
+    Save the plot in a file
+    
+    :param x: X coordinates of the tracks
+    :param y: Y coordinates of the tracks
+    :param colors: Colors to plot the tracks
+    :param name: Name of the output file where the plot will be saved
+    """
     bfig()
     for i in range(len(x[0,])):
         if npy.mean(x[:,i]) < x[0,i]:
@@ -221,6 +276,30 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     plt.close()
 
 def plot_time_bb(time, height, filename="post_process/AP_size_evolution"+extension):
+    """
+    Plot the evolution of bounding box height over time with error bars.
+    
+    This function analyzes how the height of a bounding box changes over time
+    by computing mean and standard deviation at each unique time point. It
+    generates both a plot with error bars and a CSV data file for further analysis.
+    
+    Parameters
+    ----------
+    time : array-like
+        Time points corresponding to height measurements. Can contain duplicate
+        time values for multiple measurements at the same time point.
+    height : array-like
+        Height measurements of the bounding box at each time point. Must have
+        the same length as time array.
+    filename : str, optional
+        Output filename for the plot image. Extension is determined by global
+        'extension' variable (.png or .svg) (default: "post_process/AP_size_evolution"+extension)
+        
+    Returns
+    -------
+    None
+        The function saves a plot image and a CSV data file, then closes the plot
+    """
     bfig()
     xtime = []
     ystd = []
@@ -243,9 +322,9 @@ def plot_time_bb(time, height, filename="post_process/AP_size_evolution"+extensi
 def boxstrip( x, ys, nc, mycol, filename='boxplot'+extension, yl=1, xname='', yname='', intitle='', splot=111):
     """ 
 	boxplot + stripchart of ys sort by x 
-		n : number of ys bar to plot
-		x : names of the categories
-		ys: list of ys values
+	:param n : number of ys bar to plot
+	:param x : names of the categories
+	:param ys: list of ys values
     """
 
     bfig()
@@ -282,6 +361,25 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot'+extension, yl=1, xname='', yn
     plt.close()
 
 def make_movie_with_imageio(folder='final_images', prefix="image", fps=5):
+    """
+    Create a movie from a sequence of image files using imageio.
+    
+    This function compiles a series of image files into a video file using
+    the ffmpeg backend. It supports common image formats and automatically
+    deletes the source images after creating the movie.
+        
+    Returns
+    -------
+    None
+        The function saves the movie file and prints a confirmation message
+    
+    :param folder: Description
+        Path to the folder containing the image files (default: 'final_images')
+    :param prefix: Description
+        Filename prefix to match when selecting images (default: "image")
+    :param fps: Description
+        Frames per second for the output video (default: 5)
+    """
     folder = pathlib.Path(folder)
     images = sorted(folder.glob(f"{prefix}*"+extension))
     output = folder / "movie.mp4"

@@ -28,29 +28,28 @@ from params import *
 #############################################################
 
 def time_step(t):
-    """Perform one time step"""
+    """ 
+        Perform one time step of cell migration simulation.
+    
+        This function updates the positions of all cells based on various biological
+        forces including random motion, chemotaxis, cell-cell interactions, and
+        cell-matrix interactions.
+    
+        Parameters
+        t : int
+            Current time step index
+        
+        Global Variables Updated
+        x : numpy.ndarray
+            Array of shape (nstep, N) containing x-coordinates of cells at each time step
+        y : numpy.ndarray
+            Array of shape (nstep, N) containing y-coordinates of cells at each time step
+        chemo : float
+            Chemotactic sensitivity coefficient
+    """
     global x, y, theta, chemo, num, nmat
 
     chemo = chemop
-    # if neurogenine_mutant > 0:
-    #     if t < nstep / 2:
-    #         chemo=0
-
-    ## Random motion
-    # align angle to previous motion
-    #phi = npy.zeros( (1,N) )
-    #if t > 3:
-    #    vx = ( x[t-1,] - x[t-2,] ) / dt
-    #    vy = ( y[t-1,] - y[t-2,] ) / dt
-    #    phi = ( npy.cos(theta[t-1,]) * vx + npy.sin(theta[t-1,]) * vy ) / distance(vx,vy)    # n  *v_dir
-
-    # update polarity axis 
-    # 1/tau * arcsin(n*v_dir), Viscek like
-    #theta[t,] = theta[t-1,] + 1/tau * npy.arcsin(phi)
-
-    ## add persistent motion
-    #x[t,] = x[t-1,] + v0*dt * npy.cos(theta[t,])
-    #y[t,] = y[t-1,] + v0*dt * npy.sin(theta[t,])
     
     ### random motion
     x[t,] = x[t-1,] + npy.sqrt(2*D*dt) * npy.random.randn(1,N)
@@ -113,18 +112,6 @@ def time_step(t):
             else:
                 x[t,] = x[t,]
                 y[t,] = y[t,]
-            #else:
-            ## gradient of repulsion from the 2 chemo-rep sources
-             #   dist1 = distancePt( x[t-1], y[t-1], source1x, source1y )
-             #   x[t,] = x[t,] + chemo*dt * (x[t-1,]-source1x)/dist1 * (1.0/npy.power(1 + dist1,1) )
-             #   y[t,] = y[t,] + chemo*dt * (y[t-1,]-source1y)/dist1 * (1.0/npy.power(1 + dist1,1) )
-             #   dist2 = distancePt( x[t-1], y[t-1], source2x, source2y )
-            #   x[t,] = x[t,] + chemo*dt * (x[t-1,]-source2x)/dist2 * (1.0/npy.power(1 + dist2,1) )
-           #     y[t,] = y[t,] + chemo*dt * (y[t-1,]-source2y)/dist2 * (1.0/npy.power(1 + dist2,1) )
-            #    if repulsion_sources >= 2:
-             #       dist3 = distancePt( x[t-1], y[t-1], source3x, source3y )
-              #      x[t,] = x[t,] + chemo*dt * (x[t-1,]-source3x)/dist3 * (1.0/npy.power(1 + dist3,1) )
-               #     y[t,] = y[t,] + chemo*dt * (y[t-1,]-source3y)/dist3 * (1.0/npy.power(1 + dist3,1) )
 
     
     ## add cell-cell interaction
@@ -221,7 +208,41 @@ def time_step(t):
 
 #############################################################
 def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff=None, cell_chem_interaction=None):
-    """ Main function """
+    """ 
+     Main function to run cell migration simulation.
+
+    This function initializes the simulation environment, sets up initial conditions,
+    runs the time stepping loop, and generates output visualizations and data files.
+
+    Parameters
+    cell_cell_interaction : float, optional
+    Strength of cell-cell interaction forces. If None, uses global cell_cell value.
+    cell_mat_interaction : float, optional
+    Strength of cell-matrix interaction forces. If None, uses global cell_mat value.
+    D_coeff : float, optional
+    Diffusion coefficient for random motion. If None, uses global D value.
+    cell_chem_interaction : float, optional
+    Chemotactic sensitivity coefficient. If None, uses global chemop value.
+
+    Global Parameters Used
+    N : int Number of cells in simulation
+    tmax : float Maximum simulation time
+    dt : float Time step size
+    shape : str Matrix geometry ('quadratic' or 'cylindric')
+    uniform : bool Whether to distribute cells uniformly
+    nrepet : int Number of repetitions/realizations
+    make_movie : bool Whether to generate movie frames
+    mfreq : int Movie frame frequency
+
+    Simulation Process
+    Initializes cell positions based on geometry and distribution
+    Sets up extracellular matrix (ECM) structure
+    Assigns cell types/colors based on spatial regions
+    Runs time stepping loop for nstep iterations
+    Generates trajectory plots at start, midpoint, and end
+    Creates tracking visualizations for different cell populations
+    Saves trajectory data and statistics
+       """
     #global cell_cell, cell_mat, D, chemop
     global x, y, theta, chemo, num, nmat, xmat, ymat, cols, N
     if cell_cell_interaction is not None:
@@ -393,10 +414,6 @@ def main_function(cell_cell_interaction=None, cell_mat_interaction=None, D_coeff
         MLl = npy.r_[MLl, bbox[0], bbox[1]]
         APl = npy.r_[APl, bbox[2], bbox[3]]
 
-    # boxstrip( ["anterior", "middle", "posterior"], [depant, depmid, deppost], 3, [colant, colmid, colpos], 'final_images/deplacement.png', 3.75 )
-    # print(MLl)
-    # print(APl)
-    # boxstrip( ["AP length", "ML length"], [APl, MLl], 2, ["black", "black"], 'final_images/boundingBox.png', 10 )
 
 if __name__ == "__main__":
     main_function(cell_cell, cell_mat, D, chemop)
