@@ -59,4 +59,4 @@ make_movie = 0     ## save movie
 mfreq = 200        ## frequency of saving image
 nrepet = 2         ## nb de repetition +1
 dataFreq = 50      ## frequency of saving data point
-
+plot_ext = ".svg"  ## format of the trajectories plot

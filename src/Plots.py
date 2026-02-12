@@ -12,6 +12,7 @@ importlib.reload(Matrix)
 from Matrix import *
 
 sys.path.append(".")
+extension = ".png"
 import params 
 importlib.reload(params)
 from params import *
@@ -28,7 +29,10 @@ def efig_all( filename, sh ):
     fig.tight_layout()
     plt.xlim(-4,5)
     plt.ylim(-4,5)
-    fig.savefig( filename, bbox_inches="tight" )
+    if filename.endswith(".svg"):
+        fig.savefig( filename, bbox_inches="tight", format="svg" )
+    else:
+        fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
     elif 'traj' not in filename:
@@ -44,7 +48,10 @@ def efig( filename, sh ):
     fig = plt.gcf()
     fig.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.9 )
     fig.tight_layout()
-    fig.savefig( filename, bbox_inches="tight" )
+    if filename.endswith(".svg"):
+        fig.savefig( filename, bbox_inches="tight", format="svg" )
+    else:
+        fig.savefig( filename, bbox_inches="tight" )
     if sh:
         print(''+filename+' saved')
     else:
@@ -130,9 +137,9 @@ def plotte_traj(x, y, colors, xmat, ymat, chemo, time, name, msize=7, linew=2):
             plt.plot( 0, ysource, color="black", marker="*", markersize=15 )
 
     pr = 1
-    if name == 'traj_half.png':
+    if name == 'traj_half'+extension:
         pr = 1-show_inter
-    if name == 'traj.png':
+    if name == 'traj'+extension:
         pr = 1-show_inter
     efig_all(name, pr)
     plt.close()
@@ -213,7 +220,7 @@ def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, m
     print(''+name+' saved')
     plt.close()
 
-def plot_time_bb(time, height, filename="post_process/AP_size_evolution.png"):
+def plot_time_bb(time, height, filename="post_process/AP_size_evolution"+extension):
     bfig()
     xtime = []
     ystd = []
@@ -233,7 +240,7 @@ def plot_time_bb(time, height, filename="post_process/AP_size_evolution.png"):
         npy.savetxt(fileid, plotdata, header="Time\tMean\tStd", delimiter="\t")
         fileid.close()
 
-def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname='', intitle='', splot=111):
+def boxstrip( x, ys, nc, mycol, filename='boxplot'+extension, yl=1, xname='', yname='', intitle='', splot=111):
     """ 
 	boxplot + stripchart of ys sort by x 
 		n : number of ys bar to plot
@@ -276,8 +283,12 @@ def boxstrip( x, ys, nc, mycol, filename='boxplot.png', yl=1, xname='', yname=''
 
 def make_movie_with_imageio(folder='final_images', prefix="image", fps=5):
     folder = pathlib.Path(folder)
-    images = sorted(folder.glob(f"{prefix}*.png"))
+    images = sorted(folder.glob(f"{prefix}*"+extension))
     output = folder / "movie.mp4"
+
+    if extension == ".svg":
+        print("Warning, cannot create movie with .svg plots")
+        return
 
     writer = imageio.get_writer(output, format='ffmpeg', fps=fps, codec='libx264')
     for img_path in images:

@@ -76,7 +76,7 @@ def _(double_parameter_line, mo, moui, parameter_line):
     parameters["mfreq"] = moui.number(0,2000,1,200)
     parameters["dataFreq"] = moui.number(0,2000,1,10)
     parameters["nrepet"] = moui.slider(0,100,1,1, show_value=True)
-    parameters["extension"] = moui.dropdown(options=["png", "svg", "jpg", "jpeg", "webp"], value="png")
+    parameters["extension"] = moui.dropdown(options=[".png", ".svg"], value=".png")
     parameters["name"] = moui.text("default")
     simu_config = ""
     simu_config += parameter_line("Simulation name: ", parameters["name"], "Give a name to the current simulation. A folder with this name will be created")
@@ -316,7 +316,7 @@ def __(bouton, btn_plot, mo, os, parameters):
     if btn_plot.value or bouton.value:
         plot_fold0 = os.path.join("simus", parameters["name"].value, "final_images")
         plot0 = mo.output.replace(mo.md("**Initial time**"))
-        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_tStart."+parameters["extension"].value)))
+        plot0 = mo.output.append( mo.image(os.path.join(plot_fold0, "traj_tStart"+parameters["extension"].value)))
     else:
         plot0=None
     plot0
@@ -328,7 +328,7 @@ def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
         plot_fold1 = os.path.join("simus", parameters["name"].value, "final_images")
         plot1 = mo.output.replace(mo.md("**Half time**"))
-        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_tHalfTime."+parameters["extension"].value)))
+        plot1 = mo.output.append( mo.image(os.path.join(plot_fold1, "traj_tHalfTime"+parameters["extension"].value)))
     else:
         plot1=None
     plot1
@@ -340,7 +340,7 @@ def __(btn_plot, mo, os, parameters):
     if btn_plot.value:
         plot_fold = os.path.join("simus", parameters["name"].value, "final_images")
         plot2 = mo.output.replace(mo.md("**Final time**"))
-        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj_tFinal."+parameters['extension'].value)))
+        plot2 = mo.output.append( mo.image(os.path.join(plot_fold, "traj_tFinal"+parameters['extension'].value)))
     else:
         plot2=None
     plot2
@@ -399,7 +399,7 @@ def __(mo, os, post_dir, post_plot, parameters):
         postdir = str(post_dir.path(index=0))
         plot_ant = os.path.join( postdir, "post_process" )
         plotant = mo.output.replace(mo.md("**Mean tracks**"))
-        plotant = mo.output.append( mo.image(os.path.join(plot_ant, "pool_meantracks."+parameters["extension"].value)))
+        plotant = mo.output.append( mo.image(os.path.join(plot_ant, "pool_meantracks"+parameters["extension"].value)))
     else:
         plotant=None
     plotant
@@ -411,7 +411,7 @@ def __(mo, os, plot_ant, post_plot, postdir, parameters):
     if post_plot.value:
         plot_ap = os.path.join( postdir, "post_process" )
         plotap = mo.output.replace(mo.md("**Anterior-Posterior Length**"))
-        plotap = mo.output.append( mo.image(os.path.join(plot_ant, "AP_size_evolution."+parameters["extension"].value)))
+        plotap = mo.output.append( mo.image(os.path.join(plot_ant, "AP_size_evolution"+parameters["extension"].value)))
     else:
         plotap=None
     plotap
