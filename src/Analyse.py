@@ -44,7 +44,7 @@ def bb_time( intime, inx, iny ):
     return [time, width, height]
 
 def bounding_box_time(simus, times, xs, ys):
-    """ calculate extend of BB in times for each simus """
+    """ Calculate extend of BB in times for each simus """
     restime = []
     resheight = []
     for simu in npy.unique(simus):

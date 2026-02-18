@@ -241,6 +241,20 @@ def plot_some_track(track, xs, ys, col, name, ntrack):
     plt.close()
 
 def plot_mean_track(mtrackx, mtracky, col, mtrackpx, mtrackpy, colp, mtrackmx, mtrackmy, colm, name):
+    """
+    Generate plots of the average tracks (anterior, posterior, middle), with symetry for visualization purpose 
+    
+    :param mtrackx: X coordinates of anterior tracks 
+    :param mtracky: Y coordinates of anterior tracks
+    :param col: Color of the tracks anterior
+    :param mtrackpx: X coordinates of posterior tracks
+    :param mtrackpy: Y coordiantes of posterior tracks
+    :param colp: Color of posterior track
+    :param mtrackmx: X coordinates of middle tracks
+    :param mtrackmy: Y coordinates of middle tracks
+    :param colm: Color of middle track
+    :param name: Name of the plot to save
+    """
     bfig()
 
     x = mtrackx #- mtrackx[0]

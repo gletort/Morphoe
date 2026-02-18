@@ -4,7 +4,9 @@ import random
 import numpy as npy
 
 def postprocess_simu(simuname):
-    """ Run postprocessing on one simulation (folder) """
+    """ Run postprocessing on one simulation (folder) 
+    :param simuname: str name of the main folder of the simulation to post process
+    """
     print("Running")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     sys.path.append(dir_path)
